@@ -1,11 +1,15 @@
-
 -- Proyecto Sistema de Nomina (Base de Datos)
 
-/*CREATE DATABASE bdNomina
+CREATE DATABASE bdNomina
 go
-*/
+
+
+use bdNomina
+go
 
 -- Tabla: "Empleado"
+
+
 
 
 CREATE TABLE "Empleado"
@@ -60,7 +64,6 @@ CREATE TABLE "Contrato"
 CREATE TABLE "Periodo"
 (
     idperiodo integer NOT NULL,
-    descripcion character varying(30),
     estado character varying(10),
     fechainicioperiodo date NOT NULL,
     fechafinperiodo date NOT NULL,
@@ -102,6 +105,7 @@ CREATE TABLE "Boleta"
     totalhoras integer,
     valorhora double precision,
     asignacionfamiliar bit,
+	porcentajedesc_AFP double precision,
     CONSTRAINT "BoletaPK" PRIMARY KEY (idboleta),
     CONSTRAINT "BoletaContratoFK" FOREIGN KEY (idcontrato) REFERENCES "Contrato" (idcontrato),
     CONSTRAINT "BoletaPeriodoFK" FOREIGN KEY (idperiodo) REFERENCES "Periodo" (idperiodo), 
