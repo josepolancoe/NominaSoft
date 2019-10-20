@@ -1,0 +1,516 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Capa1_Presentacion;
+
+import Capa2_Aplicacion.ServGestionarEmpleado;
+import Capa3_Dominio.Empleado;
+import Capa5_Excepcion.Mensaje;
+import Capa6_Globales.VGlobales;
+import java.awt.Color;
+import java.awt.event.KeyEvent;
+//import java.sql.Date;
+import java.util.Date;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+
+/**
+ *
+ * @author lucab
+ */
+public class DlgEmpleado extends javax.swing.JDialog {
+
+    /**
+     * Creates new form DlgEmpleado
+     */
+    
+    private Empleado empleado;
+    private boolean estado;
+
+        
+    public DlgEmpleado(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
+        initComponents();
+        this .getContentPane().setBackground(new Color(255,255,255));
+        setLocationRelativeTo(null);
+        setResizable(false); 
+        setTitle("Empleado");
+        EstadoDefault();
+        NuevoDni();     
+    }
+    
+    void EstadoDefault(){
+        LimpiarEntradas();
+        txtidEmpleado.setEditable(false);
+        ActivarControles(false);
+        ActivarEntradas(false);
+        EstadoEntradas(false);
+        txtDni.requestFocus();
+        btnCancelar.setText("Cancelar");
+        btnRegistrar.setText("Registrar");
+    }
+
+    void NuevoDni(){ 
+        String Dni = VGlobales.globalDNI;
+        if(Dni.compareTo("")!=0){
+            txtDni.setText(Dni);
+            estado = true;
+            ActivarEntradas(true);
+            EstadoEntradas(true);
+            EstadoControles(false);  
+            btnEliminar.setEnabled(false);
+            txtNombre.requestFocus();
+        }
+    }
+    
+    void LimpiarEntradas(){
+        txtidEmpleado.setText("");
+        txtDni.setText("");
+        txtNombre.setText("");
+        jdcNacimiento.setDate(null);
+        cboEsCivil.setSelectedIndex(0);
+        cboGrado.setSelectedIndex(0);
+        txtTelefono.setText("");
+        txtDireccion.setText("");
+    }
+    
+    void ActivarControles(boolean sw){
+        btnVerificaEmpleado.setEnabled(!sw);
+        btnRegistrar.setEnabled(sw);
+        btnEliminar.setEnabled(sw);
+        btnCancelar.setEnabled(sw);
+    }
+    
+    void EstadoControles(boolean sw){
+        btnVerificaEmpleado.setEnabled(false);
+        btnRegistrar.setEnabled(!sw);
+        btnEliminar.setEnabled(!sw);
+        btnCancelar.setEnabled(true);     
+    } 
+    
+    void ActivarEntradas(boolean sw){       
+        txtidEmpleado.setEnabled(sw);
+        txtNombre.setEnabled(sw);
+        jdcNacimiento.setEnabled(sw);
+        cboEsCivil.setEnabled(sw);
+        cboGrado.setEnabled(sw);       
+        txtTelefono.setEnabled(sw);       
+        txtDireccion.setEnabled(sw);
+    }    
+    
+    void EstadoEntradas(boolean sw){
+        txtDni.setEditable(!sw);
+        txtNombre.setEditable(sw);
+        cboEsCivil.setEditable(sw);
+        cboGrado.setEditable(sw);
+        txtTelefono.setEditable(sw);
+        txtDireccion.setEditable(sw);
+    }
+    
+    public void VerificarEmpleado(String dni){      
+        
+        try{
+            ServGestionarEmpleado gestionarEmpleado = new ServGestionarEmpleado();
+            empleado = gestionarEmpleado.VerificarEmpleado(dni);  
+        }catch (Exception e) {   
+            Mensaje.mostrarError(this, "Error de Registro");            
+        } 
+        if (empleado == null){
+            Mensaje.mostrarAfirmacion(this, "No exite Empleado");
+        }
+    }
+    
+    public void MostrarDatos(Empleado empleado){
+        txtidEmpleado.setText(String.valueOf(empleado.getIdempleado()));
+        txtNombre.setText(empleado.getNombre());
+        txtDni.setText(empleado.getDni());        
+        jdcNacimiento.setDate(empleado.getFechanacimiento());             
+        String estadoCivil = (empleado.getEstadocivil());
+        seleccionarValorCombo(cboEsCivil, estadoCivil);       
+        String gradoAcademico = (empleado.getGradoacademico());
+        seleccionarValorCombo(cboGrado, gradoAcademico);       
+        txtTelefono.setText(empleado.getTelefono());               
+        txtDireccion.setText(empleado.getDireccion());
+        btnEliminar.setEnabled(true);
+        btnCancelar.setEnabled(true);
+    }            
+    
+    public void seleccionarValorCombo(JComboBox combo, String valor){
+        String item;
+        for (int i = 0; i < combo.getModel().getSize(); i++)
+        {
+            item = combo.getModel().getElementAt(i).toString();
+            if (item.equalsIgnoreCase(valor))
+            {
+                combo.setSelectedItem(item);
+                
+                break;
+            }
+        }
+    } 
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jpnContacto = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
+        txtTelefono = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        txtDireccion = new javax.swing.JTextField();
+        jpnIdentidad = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        txtDni = new javax.swing.JTextField();
+        btnVerificaEmpleado = new javax.swing.JButton();
+        pnDatos = new javax.swing.JPanel();
+        cboEsCivil = new javax.swing.JComboBox<>();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jdcNacimiento = new com.toedter.calendar.JDateChooser();
+        cboGrado = new javax.swing.JComboBox<>();
+        jLabel3 = new javax.swing.JLabel();
+        txtNombre = new javax.swing.JTextField();
+        txtidEmpleado = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        btnRegistrar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jpnContacto.setBorder(javax.swing.BorderFactory.createTitledBorder("Contacto:"));
+        jpnContacto.setOpaque(false);
+        jpnContacto.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel8.setText("Telefono:");
+        jpnContacto.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, -1));
+        jpnContacto.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 30, 340, -1));
+
+        jLabel9.setText("Direccion:");
+        jpnContacto.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, -1, -1));
+        jpnContacto.add(txtDireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 60, 340, -1));
+
+        getContentPane().add(jpnContacto, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 450, 100));
+
+        jpnIdentidad.setBorder(javax.swing.BorderFactory.createTitledBorder("Identidad"));
+        jpnIdentidad.setOpaque(false);
+        jpnIdentidad.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setText("DNI:");
+        jpnIdentidad.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, 20));
+
+        txtDni.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDniActionPerformed(evt);
+            }
+        });
+        txtDni.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDniKeyTyped(evt);
+            }
+        });
+        jpnIdentidad.add(txtDni, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 30, 100, -1));
+
+        btnVerificaEmpleado.setText("Verificar");
+        btnVerificaEmpleado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerificaEmpleadoActionPerformed(evt);
+            }
+        });
+        jpnIdentidad.add(btnVerificaEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 30, -1, -1));
+
+        getContentPane().add(jpnIdentidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 340, 80));
+
+        pnDatos.setBorder(javax.swing.BorderFactory.createTitledBorder("Datos"));
+        pnDatos.setOpaque(false);
+        pnDatos.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        cboEsCivil.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccionar>", "Casado(a)", "Soltero(a)", "Viudo(a)", "Divorsiado(a)", "Separados" }));
+        cboEsCivil.setName("Paciente"); // NOI18N
+        pnDatos.add(cboEsCivil, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 120, 100, -1));
+
+        jLabel11.setText("Estado Civil:");
+        pnDatos.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, -1, -1));
+
+        jLabel5.setText("Fecha de Nacimineto:");
+        pnDatos.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
+
+        jLabel7.setText("Grado Academico:");
+        pnDatos.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, -1, -1));
+        pnDatos.add(jdcNacimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 90, 260, -1));
+
+        cboGrado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "<Seleccionar>", "Primaria", "Secundaria", "Bachiller", "Profesional", "Magister", "Doctor", " " }));
+        pnDatos.add(cboGrado, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 150, 100, -1));
+
+        jLabel3.setText("Nombre:");
+        pnDatos.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, -1, -1));
+
+        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreKeyTyped(evt);
+            }
+        });
+        pnDatos.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 60, 340, -1));
+
+        txtidEmpleado.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtidEmpleadoKeyTyped(evt);
+            }
+        });
+        pnDatos.add(txtidEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 30, 100, -1));
+
+        jLabel2.setText("Codigo:");
+        pnDatos.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, -1));
+
+        getContentPane().add(pnDatos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 450, 190));
+
+        btnRegistrar.setText("Registrar");
+        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegistrarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 10, 90, -1));
+
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 40, 90, -1));
+
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 70, 90, -1));
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void txtDniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDniActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDniActionPerformed
+
+    private void txtDniKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDniKeyTyped
+        // TODO add your handling code here:
+        String patron_de_entrada = "0123456789.";
+        if (txtDni.getText().length() == 8 ||
+            !patron_de_entrada.contains(String.valueOf(evt.getKeyChar())))
+        evt.consume();
+    }//GEN-LAST:event_txtDniKeyTyped
+
+    private void btnVerificaEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerificaEmpleadoActionPerformed
+        // TODO add your handling code here:  
+         if(txtDni.getText().compareTo("")!=0 && txtDni.getText().length() == 8){
+            String verDni = txtDni.getText();
+            VerificarEmpleado(verDni);
+            if(empleado != null){
+                estado = false;
+                ActivarEntradas(true);
+                ActivarControles(true);  
+                MostrarDatos(empleado);                
+                btnRegistrar.setText("Actualizar");
+            }else{
+                estado = true;
+                ActivarEntradas(true);
+                EstadoEntradas(true);
+                EstadoControles(false);  
+                btnEliminar.setEnabled(false);
+                txtNombre.requestFocus();
+            }
+        } else
+        JOptionPane.showMessageDialog(null,"Ingrese DNI");
+       
+    }//GEN-LAST:event_btnVerificaEmpleadoActionPerformed
+
+    private void txtidEmpleadoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtidEmpleadoKeyTyped
+        // TODO add your handling code here:
+        if (txtidEmpleado.getText().length() == 5)
+        evt.consume();
+    }//GEN-LAST:event_txtidEmpleadoKeyTyped
+
+    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
+        // TODO add your handling code here:
+        if(!Character.isLetter(evt.getKeyChar()) && !(evt.getKeyChar()==KeyEvent.VK_SPACE) && !(evt.getKeyChar()==KeyEvent.VK_BACK_SPACE))
+        evt.consume();
+    }//GEN-LAST:event_txtNombreKeyTyped
+
+    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        // TODO add your handling code here:
+        String Nombre, Dni, EstadoCivil, GradoAcademico, Telefono, Direccion;
+        int idEmpleado;
+        
+        if(estado) {
+            if(txtNombre.getText().compareTo("")!=0 && txtDni.getText().compareTo("")!=0 && txtTelefono.getText().compareTo("")!=0  && txtDireccion.getText().compareTo("")!=0)
+            {
+                
+                Dni = (txtDni.getText());
+                Nombre = (txtNombre.getText()).toUpperCase();                 
+                long date = 0;     
+                Date Fecha = jdcNacimiento.getDate();                
+                date = Fecha.getTime(); 
+                java.sql.Date FechaNacimiento = new java.sql.Date(date); 
+
+                GradoAcademico = (String.valueOf(cboGrado.getSelectedItem()));
+                EstadoCivil = (String.valueOf(cboEsCivil.getSelectedItem()));
+                Telefono = txtTelefono.getText();           
+                Direccion = (txtDireccion.getText());
+ 
+                try {                 
+                    empleado = new Empleado(Dni, Nombre, FechaNacimiento, GradoAcademico, EstadoCivil, Telefono, Direccion);                    
+                    ServGestionarEmpleado gestionarEmpleado = new ServGestionarEmpleado();
+                    gestionarEmpleado.IngresarEmpleado(empleado);
+                    JOptionPane.showMessageDialog(null,"Dato registrado");
+                    estado = false;
+                    EstadoControles(false);
+                    btnRegistrar.setText("Actualizar");
+                    btnCancelar.setText("Finalizar");  
+                    VerificarEmpleado(Dni);
+                    MostrarDatos(empleado);
+                } catch (Exception e) {
+                    Mensaje.mostrarError(this, "Error de Ingreso");
+                }
+            } else
+                JOptionPane.showMessageDialog(null,"faltan llenar datos");
+        } else {
+            if(txtNombre.getText().compareTo("")!=0 && txtDni.getText().compareTo("")!=0 && txtTelefono.getText().compareTo("")!=0  && txtDireccion.getText().compareTo("")!=0){
+                idEmpleado = Integer.parseInt(txtidEmpleado.getText());
+                Dni = (txtDni.getText());
+                Nombre = (txtNombre.getText()).toUpperCase();
+                    
+                long date = 0;     
+                Date Fecha = jdcNacimiento.getDate();                
+                date = Fecha.getTime(); 
+                java.sql.Date FechaNacimiento = new java.sql.Date(date); 
+                GradoAcademico = (String.valueOf(cboGrado.getSelectedItem()));
+                EstadoCivil = (String.valueOf(cboEsCivil.getSelectedItem()));
+                Telefono = txtTelefono.getText();           
+                Direccion = (txtDireccion.getText()).toUpperCase();
+                
+                try {
+                    empleado = new Empleado(idEmpleado, Dni, Nombre, FechaNacimiento, GradoAcademico, EstadoCivil, Telefono, Direccion);                                      
+                    ServGestionarEmpleado gestionarEmpleado = new ServGestionarEmpleado();                          
+                    gestionarEmpleado.ModificarEmpleado(empleado);
+                    JOptionPane.showMessageDialog(null,"Dato modificado");                    
+                    ActivarControles(true);
+                    ActivarEntradas(true);                    
+                    EstadoControles(false);
+                    btnCancelar.setText("Terminar");   
+                    MostrarDatos(empleado);
+     
+                } catch (Exception e) {
+                    Mensaje.mostrarError(this, "Error de Actualizacion");
+                }
+            } else
+                JOptionPane.showMessageDialog(null,"faltan llenar datos");
+            }
+    }//GEN-LAST:event_btnRegistrarActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        EstadoDefault();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:   
+        if(txtDni.getText().compareTo("")!=0){    
+            int seleccion = JOptionPane.showConfirmDialog(this,"Deseas Eliminarlo ","Eliminar Empleado",JOptionPane.YES_NO_OPTION );
+            if( seleccion == JOptionPane.YES_OPTION ) {   
+                try {                
+                    ServGestionarEmpleado gestionarEmpleado = new ServGestionarEmpleado();                
+                    int registros_afectados = gestionarEmpleado.EliminarEmpleado(empleado);
+
+                    if(registros_afectados == 1){
+                    JOptionPane.showMessageDialog(this,"Empleado Eliminado");
+                    EstadoDefault();
+                    }
+                } catch (Exception e) {
+                    Mensaje.mostrarError(this, "Error al Eliminar");
+                }       
+            }          
+        } else
+            JOptionPane.showMessageDialog(null,"Sin datos para eliminar");
+        
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(DlgEmpleado.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(DlgEmpleado.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(DlgEmpleado.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(DlgEmpleado.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the dialog */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                DlgEmpleado dialog = new DlgEmpleado(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnRegistrar;
+    private javax.swing.JButton btnVerificaEmpleado;
+    private javax.swing.JComboBox<String> cboEsCivil;
+    private javax.swing.JComboBox<String> cboGrado;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private com.toedter.calendar.JDateChooser jdcNacimiento;
+    private javax.swing.JPanel jpnContacto;
+    private javax.swing.JPanel jpnIdentidad;
+    private javax.swing.JPanel pnDatos;
+    private javax.swing.JTextField txtDireccion;
+    private javax.swing.JTextField txtDni;
+    private javax.swing.JTextField txtNombre;
+    private javax.swing.JTextField txtTelefono;
+    private javax.swing.JTextField txtidEmpleado;
+    // End of variables declaration//GEN-END:variables
+}
