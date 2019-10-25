@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Boleta.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;NominaSoft&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">Capa3_Dominio</a> &gt; <span class="el_source">Boleta.java</span></div><h1>Boleta.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Capa3_Dominio;
+
+import Capa2_Aplicacion.ServGestionarContrato;
+import Capa2_Aplicacion.ServGestionarPeriodo;
+import Capa5_Excepcion.Mensaje;
+import java.util.Calendar;
+import java.util.Date;
+
+
+public class Boleta {
+    
+    int idboleta;
+    Contrato contrato;
+    Periodo periodo;
+    Concepto conceptoingresodescuento;
+    Date fecha;
+    int totalhoras;
+    double valorhora;
+    boolean asignacionfamiliar;
+    double porcentajedesc_AFP;
+
+<span class="nc" id="L27">    public Boleta(int idboleta, Contrato contrato, Periodo periodo, Concepto conceptoingresodescuento, Date fecha, int totalhoras, double valorhora, boolean asignacionfamiliar, double porcentajedesc_AFP) {</span>
+<span class="nc" id="L28">        this.idboleta = idboleta;</span>
+<span class="nc" id="L29">        this.contrato = contrato;</span>
+<span class="nc" id="L30">        this.periodo = periodo;</span>
+<span class="nc" id="L31">        this.conceptoingresodescuento = conceptoingresodescuento;</span>
+<span class="nc" id="L32">        this.fecha = fecha;</span>
+<span class="nc" id="L33">        this.totalhoras = totalhoras;</span>
+<span class="nc" id="L34">        this.valorhora = valorhora;</span>
+<span class="nc" id="L35">        this.asignacionfamiliar = asignacionfamiliar;</span>
+<span class="nc" id="L36">        this.porcentajedesc_AFP = porcentajedesc_AFP;</span>
+<span class="nc" id="L37">    }</span>
+<span class="fc" id="L38">    public Boleta(){}</span>
+
+    public int getIdboleta() {
+<span class="nc" id="L41">        return idboleta;</span>
+    }
+
+    public void setIdboleta(int idboleta) {
+<span class="nc" id="L45">        this.idboleta = idboleta;</span>
+<span class="nc" id="L46">    }</span>
+
+    public Contrato getContrato() {
+<span class="nc" id="L49">        return contrato;</span>
+    }
+
+    public void setContrato(Contrato contrato) {
+<span class="fc" id="L53">        this.contrato = contrato;</span>
+<span class="fc" id="L54">    }</span>
+
+    public Periodo getPeriodo() {
+<span class="nc" id="L57">        return periodo;</span>
+    }
+
+    public void setPeriodo(Periodo periodo) {
+<span class="fc" id="L61">        this.periodo = periodo;</span>
+<span class="fc" id="L62">    }</span>
+
+    public Concepto getConceptoingresodescuento() {
+<span class="nc" id="L65">        return conceptoingresodescuento;</span>
+    }
+
+    public void setConceptoingresodescuento(Concepto conceptoingresodescuento) {
+<span class="fc" id="L69">        this.conceptoingresodescuento = conceptoingresodescuento;</span>
+<span class="fc" id="L70">    }</span>
+
+    public Date getFecha() {
+<span class="nc" id="L73">        return fecha;</span>
+    }
+
+    public void setFecha(Date fecha) {
+<span class="nc" id="L77">        this.fecha = fecha;</span>
+<span class="nc" id="L78">    }</span>
+
+    public int getTotalhoras() {
+<span class="nc" id="L81">        return totalhoras;</span>
+    }
+
+    public void setTotalhoras(int totalhoras) {
+<span class="nc" id="L85">        this.totalhoras = totalhoras;</span>
+<span class="nc" id="L86">    }</span>
+
+    public double getValorhora() {
+<span class="nc" id="L89">        return valorhora;</span>
+    }
+
+    public void setValorhora(double valorhora) {
+<span class="nc" id="L93">        this.valorhora = valorhora;</span>
+<span class="nc" id="L94">    }</span>
+
+    public boolean getAsignacionfamiliar() {
+<span class="nc" id="L97">        return asignacionfamiliar;</span>
+    }
+
+    public void setAsignacionfamiliar(boolean asignacionfamiliar) {
+<span class="nc" id="L101">        this.asignacionfamiliar = asignacionfamiliar;</span>
+<span class="nc" id="L102">    }</span>
+
+    public double getPorcentajedesc_AFP() {
+<span class="nc" id="L105">        return porcentajedesc_AFP;</span>
+    }
+
+    public void setPorcentajedesc_AFP(double porcentajedesc_AFP) {
+<span class="fc" id="L109">        this.porcentajedesc_AFP = porcentajedesc_AFP;</span>
+<span class="fc" id="L110">    }</span>
+
+// Metodos y Funciones (Reglas del negocio)
+    
+
+    public double calcularTotalHoras(){
+<span class="fc" id="L116">        double totalhoras = 0;</span>
+<span class="fc" id="L117">        totalhoras = periodo.calculartotalSemanasPeriodo() * contrato.totalhoras;</span>
+<span class="fc" id="L118">        return totalhoras;</span>
+    }
+
+    public double calcularTotalIngresos(){
+        double totalingreso;
+<span class="fc" id="L123">        Contrato contrato = new Contrato();</span>
+<span class="fc" id="L124">        totalingreso= calcularSueldoBasico()+ contrato.cacularAsignacionFamiliar()+ conceptoingresodescuento.calcularConcepto_Ingresar();</span>
+<span class="fc" id="L125">        return totalingreso;</span>
+    }
+    
+    public double calcularSueldoBasico(){
+<span class="fc" id="L129">        double sueldobasico = 0;</span>
+<span class="fc" id="L130">        sueldobasico = contrato.valorhora * calcularTotalHoras();</span>
+<span class="fc" id="L131">        return sueldobasico;</span>
+    }
+     public double calcularSueldoNeto(){
+<span class="fc" id="L134">        double sueldoneto = 0;</span>
+<span class="fc" id="L135">        sueldoneto = calcularTotalIngresos()+calcularTotaldescuentos();</span>
+<span class="fc" id="L136">        return sueldoneto;</span>
+    }
+    public double calcularTotaldescuentos(){
+<span class="fc" id="L139">        double totaldescuentos = 0;</span>
+        
+<span class="fc" id="L141">        totaldescuentos = calcularAFP()+ conceptoingresodescuento.calcularConcepto_Descuento();</span>
+<span class="fc" id="L142">        return totaldescuentos;</span>
+    }
+    public double calcularAFP(){
+<span class="fc" id="L145">              double AFP= 0;</span>
+<span class="fc" id="L146">              AFP = calcularSueldoBasico()*porcentajedesc_AFP;</span>
+<span class="fc" id="L147">              return AFP;</span>
+    }
+        
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
