@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>AfpDAOPostgre.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;NominaSoft&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">Capa4_Persistencia</a> &gt; <span class="el_source">AfpDAOPostgre.java</span></div><h1>AfpDAOPostgre.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Capa4_Persistencia;
+
+import Capa3_Dominio.Afp;
+import Capa5_Excepcion.ExcepcionSQL;
+import java.util.List;
+import java.util.ArrayList;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+/**
+ *
+ * @author JOSEPOLANCO
+ */
+public class AfpDAOPostgre {
+    
+    GestorJDBC gestorJDBC;
+
+<span class="nc" id="L23">    public AfpDAOPostgre (GestorJDBC gestorJDBC) {</span>
+<span class="nc" id="L24">        this.gestorJDBC = gestorJDBC;</span>
+<span class="nc" id="L25">    }</span>
+    
+    private void asignarParametros(PreparedStatement sentencia, Afp afp) throws SQLException {
+        //sentencia.setInt(3, afp.getIdafp());
+<span class="nc" id="L29">        sentencia.setString(1, afp.getNombre());</span>
+<span class="nc" id="L30">        sentencia.setDouble(2, afp.getPorcentaje());</span>
+<span class="nc" id="L31">        }</span>
+    
+    private Afp crearObjAfp(ResultSet resultado) throws SQLException {  
+<span class="nc" id="L34">        return new Afp(resultado.getInt(&quot;idafp&quot;),</span>
+<span class="nc" id="L35">                            resultado.getString(&quot;nombre&quot;), </span>
+<span class="nc" id="L36">                            resultado.getDouble(&quot;porcentaje&quot;));</span>
+
+    }
+    
+    public int ingresarAfp(Afp afp) throws Exception {
+        int registros_afectados;
+<span class="nc" id="L42">        String sentenciaSQL = &quot;insert into afp(nombre, porcentaje)&quot;</span>
+                                + &quot; values(?,?)&quot;;
+        try {
+<span class="nc" id="L45">            PreparedStatement sentencia = gestorJDBC.prepararSentencia(sentenciaSQL);</span>
+<span class="nc" id="L46">            asignarParametros(sentencia, afp);            </span>
+<span class="nc" id="L47">            registros_afectados = sentencia.executeUpdate();</span>
+<span class="nc" id="L48">            sentencia.close();</span>
+<span class="nc bnc" id="L49" title="All 2 branches missed.">            if(registros_afectados == 0){</span>
+<span class="nc" id="L50">                throw ExcepcionSQL.crearErrorInsertar();</span>
+            }
+<span class="nc" id="L52">        return registros_afectados;</span>
+<span class="nc" id="L53">        } catch (Exception e) {</span>
+<span class="nc" id="L54">            throw ExcepcionSQL.crearErrorInsertar();</span>
+        }
+    }    
+         
+
+    public int modificarAfp(Afp afp) throws Exception {
+        int registros_afectados;
+<span class="nc" id="L61">        String sentenciaSQL = &quot;update afp set nombre = ?, porcentaje = ? where idafp = ?&quot;;</span>
+        try {
+<span class="nc" id="L63">            PreparedStatement sentencia = gestorJDBC.prepararSentencia(sentenciaSQL);</span>
+<span class="nc" id="L64">            asignarParametros(sentencia, afp);</span>
+<span class="nc" id="L65">            sentencia.setInt(3, afp.getIdafp());</span>
+<span class="nc" id="L66">            registros_afectados = sentencia.executeUpdate();</span>
+<span class="nc" id="L67">            sentencia.close();</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">            if(registros_afectados == 0){</span>
+<span class="nc" id="L69">                throw ExcepcionSQL.crearErrorModificar();</span>
+            }
+<span class="nc" id="L71">        return registros_afectados;</span>
+<span class="nc" id="L72">        } catch (Exception e) {</span>
+<span class="nc" id="L73">            throw ExcepcionSQL.crearErrorModificar();</span>
+        }        
+    }
+      
+    public int eliminarAfp(Afp afp) throws Exception {
+        int registros_afectados;
+<span class="nc" id="L79">        String sentenciaSQL = &quot;delete from afp where idafp = ?&quot;;</span>
+        try {
+<span class="nc" id="L81">            PreparedStatement sentencia = gestorJDBC.prepararSentencia(sentenciaSQL);</span>
+<span class="nc" id="L82">            sentencia.setInt(1, afp.getIdafp());</span>
+<span class="nc" id="L83">            registros_afectados = sentencia.executeUpdate();</span>
+<span class="nc" id="L84">            sentencia.close();</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">            if(registros_afectados == 0){</span>
+<span class="nc" id="L86">                throw ExcepcionSQL.crearErrorEliminar();</span>
+            }
+<span class="nc" id="L88">        return registros_afectados;</span>
+<span class="nc" id="L89">        } catch (Exception e) {</span>
+<span class="nc" id="L90">            throw ExcepcionSQL.crearErrorEliminar();</span>
+        }
+    } 
+
+    public List&lt;Afp&gt; buscarAfps()throws Exception{
+<span class="nc" id="L95">        ArrayList&lt;Afp&gt; listaAfps = new ArrayList();</span>
+        ResultSet resultado;
+        Afp afp;       
+<span class="nc" id="L98">        String sentenciaSQL =&quot;Select idafp, nombre, porcentaje from afp &quot;;       </span>
+        try{
+<span class="nc" id="L100">            resultado = gestorJDBC.ejecutarConsulta(sentenciaSQL);    </span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">            while(resultado.next()){ </span>
+<span class="nc" id="L102">                afp = crearObjAfp(resultado); </span>
+<span class="nc" id="L103">                listaAfps.add(afp);</span>
+           }          
+<span class="nc" id="L105">            resultado.close();</span>
+<span class="nc" id="L106">            return listaAfps;    </span>
+<span class="nc" id="L107">        }catch (Exception e) {</span>
+<span class="nc" id="L108">            throw ExcepcionSQL.crearErrorConsultar();</span>
+        }
+    }
+    
+    public Afp verificarAfp(int idAfp) throws Exception {
+<span class="nc" id="L113">        Afp afp = null;</span>
+        ResultSet resultado;
+<span class="nc" id="L115">        String sentenciaSQL = &quot;select idafp, nombre, porcentaje&quot;</span>
+                            + &quot; from afp&quot;
+                            + &quot; where idafp =&quot; + idAfp;
+        try {
+<span class="nc" id="L119">            resultado = gestorJDBC.ejecutarConsulta(sentenciaSQL);            </span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">            if(resultado.next()){</span>
+<span class="nc" id="L121">            afp = crearObjAfp(resultado); </span>
+            }
+<span class="nc" id="L123">            resultado.close();</span>
+<span class="nc" id="L124">            return afp;    </span>
+<span class="nc" id="L125">        } catch (Exception e) {</span>
+<span class="nc" id="L126">            throw ExcepcionSQL.crearErrorConsultar();</span>
+        }        
+    }  
+    
+        public Afp verificarNombreAfp(String nombre) throws Exception {
+<span class="nc" id="L131">        Afp afp = null;</span>
+        ResultSet resultado;
+<span class="nc" id="L133">        String sentenciaSQL = &quot;select idafp, nombre, porcentaje&quot;</span>
+                            + &quot; from afp&quot;
+                            + &quot; where nombre like '%&quot; + nombre + &quot;%'&quot;;
+        try {
+<span class="nc" id="L137">            resultado = gestorJDBC.ejecutarConsulta(sentenciaSQL);            </span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">            if(resultado.next()){</span>
+<span class="nc" id="L139">            afp = crearObjAfp(resultado); </span>
+            }
+<span class="nc" id="L141">            resultado.close();</span>
+<span class="nc" id="L142">            return afp;    </span>
+<span class="nc" id="L143">        } catch (Exception e) {</span>
+<span class="nc" id="L144">            throw ExcepcionSQL.crearErrorConsultar();</span>
+        }        
+    }  
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

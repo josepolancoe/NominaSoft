@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ServGestionarEmpleado.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;NominaSoft&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">Capa2_Aplicacion</a> &gt; <span class="el_source">ServGestionarEmpleado.java</span></div><h1>ServGestionarEmpleado.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Capa2_Aplicacion;
+
+import Capa3_Dominio.Empleado;
+import Capa4_Persistencia.ConexionDAOPostgre;
+import Capa4_Persistencia.EmpleadoDAOPostgre;
+import Capa4_Persistencia.GestorJDBC;
+
+/**
+ *
+ * @author JOSEPOLANCO
+ */
+public class ServGestionarEmpleado {
+    
+    private GestorJDBC gestorJDBC;
+    private EmpleadoDAOPostgre empleadoDAOPostgre;
+    
+    
+<span class="nc" id="L23">    public ServGestionarEmpleado() {</span>
+<span class="nc" id="L24">        gestorJDBC = new ConexionDAOPostgre();</span>
+<span class="nc" id="L25">        empleadoDAOPostgre = new EmpleadoDAOPostgre(gestorJDBC);</span>
+<span class="nc" id="L26">    }  </span>
+    
+    public int IngresarEmpleado(Empleado empleado) throws Exception{
+<span class="nc" id="L29">        gestorJDBC.abrirConexion();</span>
+<span class="nc" id="L30">        gestorJDBC.iniciarTransaccion();</span>
+        try {
+<span class="nc" id="L32">            int registros_afectados = empleadoDAOPostgre.ingresarEmpleado(empleado);</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">            if(registros_afectados == 1)</span>
+<span class="nc" id="L34">                   gestorJDBC.terminarTransaccion();</span>
+<span class="nc" id="L35">                   return registros_afectados;  </span>
+<span class="nc" id="L36">        } catch (Exception e) {</span>
+<span class="nc" id="L37">            gestorJDBC.cancelarTransaccion();</span>
+<span class="nc" id="L38">            throw e;</span>
+        }    
+    }
+   
+    public int ModificarEmpleado(Empleado empleado) throws Exception{
+<span class="nc" id="L43">        gestorJDBC.abrirConexion();</span>
+<span class="nc" id="L44">        gestorJDBC.iniciarTransaccion();</span>
+        try {
+<span class="nc" id="L46">            int registros_afectados = empleadoDAOPostgre.modificarEmpleado(empleado);</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">            if(registros_afectados == 1)</span>
+<span class="nc" id="L48">                gestorJDBC.terminarTransaccion();</span>
+<span class="nc" id="L49">                return registros_afectados;</span>
+<span class="nc" id="L50">        } catch (Exception e) {</span>
+<span class="nc" id="L51">            gestorJDBC.cancelarTransaccion();</span>
+<span class="nc" id="L52">            throw e;</span>
+        }
+    }
+    
+    public int EliminarEmpleado(Empleado empleado) throws Exception{
+<span class="nc" id="L57">        gestorJDBC.abrirConexion();</span>
+<span class="nc" id="L58">        gestorJDBC.iniciarTransaccion();</span>
+        try {
+<span class="nc" id="L60">            int registros_afectados = empleadoDAOPostgre.eliminarEmpleado(empleado);</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">            if(registros_afectados == 1)</span>
+<span class="nc" id="L62">                   gestorJDBC.terminarTransaccion();</span>
+<span class="nc" id="L63">                   return registros_afectados;             </span>
+<span class="nc" id="L64">        } catch (Exception e) {</span>
+<span class="nc" id="L65">            gestorJDBC.cancelarTransaccion();</span>
+<span class="nc" id="L66">            throw e;</span>
+        }
+    }
+        
+    public Empleado VerificarEmpleado(String dni) throws Exception{
+<span class="nc" id="L71">        Empleado empleado = null;</span>
+<span class="nc" id="L72">        gestorJDBC.abrirConexion();</span>
+        try {            
+<span class="nc" id="L74">            empleado = empleadoDAOPostgre.verificarEmpleado(dni);                        </span>
+<span class="nc" id="L75">        } catch (Exception e) {</span>
+<span class="nc" id="L76">            gestorJDBC.cerrarConexion();</span>
+<span class="nc" id="L77">            throw e;</span>
+<span class="nc" id="L78">        }</span>
+<span class="nc" id="L79">        gestorJDBC.cerrarConexion();</span>
+<span class="nc" id="L80">        return empleado;</span>
+    }  
+    
+    
+    
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ConexionDAOPostgre.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;NominaSoft&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">Capa4_Persistencia</a> &gt; <span class="el_source">ConexionDAOPostgre.java</span></div><h1>ConexionDAOPostgre.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Capa4_Persistencia;
+
+import Capa5_Excepcion.ExcepcionSQL;
+import java.sql.DriverManager;
+
+/**
+ *
+ * @author JOSEPOLANCO
+ */
+<span class="nc" id="L15">public class ConexionDAOPostgre extends GestorJDBC {</span>
+        
+    public void abrirConexion() throws Exception{        
+        try {
+<span class="nc" id="L19">            Class.forName(&quot;org.postgresql.Driver&quot;);</span>
+<span class="nc" id="L20">            String url = &quot;jdbc:postgresql://localhost:5432/dbNomina&quot;;</span>
+<span class="nc" id="L21">            conexion = DriverManager.getConnection(url, &quot;postgres&quot;, &quot;junior10&quot;);   </span>
+<span class="nc" id="L22">        } catch (Exception e) {</span>
+<span class="nc" id="L23">            throw ExcepcionSQL.crearErrorAbrirConexion();</span>
+<span class="nc" id="L24">        }        </span>
+<span class="nc" id="L25">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

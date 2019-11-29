@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>EmpleadoDAOPostgre.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;NominaSoft&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">Capa4_Persistencia</a> &gt; <span class="el_source">EmpleadoDAOPostgre.java</span></div><h1>EmpleadoDAOPostgre.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Capa4_Persistencia;
+
+import Capa3_Dominio.Empleado;
+import Capa5_Excepcion.ExcepcionSQL;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+/**
+ *
+ * @author JOSEPOLANCO
+ */
+public class EmpleadoDAOPostgre {
+    
+    GestorJDBC gestorJDBC;
+
+<span class="nc" id="L22">    public EmpleadoDAOPostgre(GestorJDBC gestorJDBC) {</span>
+<span class="nc" id="L23">        this.gestorJDBC = gestorJDBC;</span>
+<span class="nc" id="L24">    }</span>
+    
+    private void asignarParametros(PreparedStatement sentencia, Empleado empleado) throws SQLException {
+        //sentencia.setInt(8, empleado.getIdempleado());
+<span class="nc" id="L28">        sentencia.setString(1, empleado.getDni());</span>
+<span class="nc" id="L29">        sentencia.setString(2, empleado.getNombre());</span>
+<span class="nc" id="L30">        sentencia.setDate(3, empleado.getFechanacimiento());</span>
+<span class="nc" id="L31">        sentencia.setString(4, empleado.getGradoacademico());</span>
+<span class="nc" id="L32">        sentencia.setString(5, empleado.getEstadocivil());</span>
+<span class="nc" id="L33">        sentencia.setString(6, empleado.getTelefono());</span>
+<span class="nc" id="L34">        sentencia.setString(7, empleado.getDireccion());</span>
+<span class="nc" id="L35">    }</span>
+    
+    private Empleado crearObjEmpleado(ResultSet resultado) throws SQLException {
+<span class="nc" id="L38">        return new Empleado(resultado.getInt(&quot;idempleado&quot;), </span>
+<span class="nc" id="L39">                            resultado.getString(&quot;dni&quot;), </span>
+<span class="nc" id="L40">                            resultado.getString(&quot;nombre&quot;),</span>
+<span class="nc" id="L41">                            resultado.getDate(&quot;fechanacimiento&quot;), </span>
+<span class="nc" id="L42">                            resultado.getString(&quot;gradoacademico&quot;), </span>
+<span class="nc" id="L43">                            resultado.getString(&quot;estadocivil&quot;), </span>
+<span class="nc" id="L44">                            resultado.getString(&quot;telefono&quot;),</span>
+<span class="nc" id="L45">                            resultado.getString(&quot;direccion&quot;));    </span>
+    } 
+     
+    public int ingresarEmpleado(Empleado empleado) throws Exception {
+        int registros_afectados;
+<span class="nc" id="L50">        String sentenciaSQL = &quot;insert into empleado(dni, nombre, fechanacimiento, gradoacademico, estadocivil,  telefono, direccion)&quot;</span>
+                                + &quot;values(?,?,?,?,?,?,?)&quot;;
+        try {
+<span class="nc" id="L53">            PreparedStatement sentencia = gestorJDBC.prepararSentencia(sentenciaSQL);</span>
+<span class="nc" id="L54">            asignarParametros(sentencia, empleado);</span>
+<span class="nc" id="L55">            registros_afectados = sentencia.executeUpdate();</span>
+<span class="nc" id="L56">            sentencia.close();</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">            if(registros_afectados == 0){</span>
+<span class="nc" id="L58">                throw ExcepcionSQL.crearErrorInsertar();</span>
+            }
+<span class="nc" id="L60">        return registros_afectados;</span>
+<span class="nc" id="L61">        } catch (Exception e) {</span>
+<span class="nc" id="L62">            throw ExcepcionSQL.crearErrorInsertar();</span>
+        }
+    }
+    
+    public int modificarEmpleado(Empleado empleado) throws Exception {
+        int registros_afectados;
+<span class="nc" id="L68">        String sentenciaSQL = &quot;update empleado set dni = ?, nombre = ?, fechanacimiento = ?, gradoacademico = ?, estadocivil = ?, telefono = ?, direccion = ?&quot;</span>
+                + &quot; where idempleado = ?&quot;;
+        try {
+<span class="nc" id="L71">            PreparedStatement sentencia = gestorJDBC.prepararSentencia(sentenciaSQL);</span>
+<span class="nc" id="L72">            asignarParametros(sentencia, empleado);</span>
+<span class="nc" id="L73">            sentencia.setInt(8, empleado.getIdempleado());</span>
+<span class="nc" id="L74">            registros_afectados = sentencia.executeUpdate();</span>
+<span class="nc" id="L75">            sentencia.close();</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">            if(registros_afectados == 0){</span>
+<span class="nc" id="L77">                throw ExcepcionSQL.crearErrorModificar();</span>
+            }
+<span class="nc" id="L79">        return registros_afectados;</span>
+<span class="nc" id="L80">        } catch (Exception e) {</span>
+<span class="nc" id="L81">            throw ExcepcionSQL.crearErrorModificar();</span>
+        }        
+    }
+    
+    
+    public int eliminarEmpleado(Empleado empleado) throws Exception {
+        int registros_afectados;
+<span class="nc" id="L88">        String sentenciaSQL = &quot;delete from empleado where idempleado = ?&quot;;</span>
+        try {
+<span class="nc" id="L90">            PreparedStatement sentencia = gestorJDBC.prepararSentencia(sentenciaSQL);</span>
+<span class="nc" id="L91">            sentencia.setInt(1, empleado.getIdempleado());</span>
+<span class="nc" id="L92">            registros_afectados = sentencia.executeUpdate();</span>
+<span class="nc" id="L93">            sentencia.close();</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">            if(registros_afectados == 0){</span>
+<span class="nc" id="L95">                throw ExcepcionSQL.crearErrorEliminar();</span>
+            }
+<span class="nc" id="L97">        return registros_afectados;</span>
+<span class="nc" id="L98">        } catch (Exception e) {</span>
+<span class="nc" id="L99">            throw ExcepcionSQL.crearErrorEliminar();</span>
+        }
+    } 
+       
+    public Empleado verificarEmpleado(String dni) throws Exception {
+<span class="nc" id="L104">        Empleado empleado = null;</span>
+        ResultSet resultado;
+<span class="nc" id="L106">        String sentenciaSQL = &quot;select idempleado, dni, nombre, fechanacimiento, gradoacademico, estadocivil, telefono, direccion&quot;</span>
+                            + &quot; from empleado&quot;
+                            + &quot; where dni like '%&quot; + dni + &quot;%'&quot;;
+        try {
+<span class="nc" id="L110">            resultado = gestorJDBC.ejecutarConsulta(sentenciaSQL);            </span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">            if(resultado.next()){</span>
+<span class="nc" id="L112">            empleado = crearObjEmpleado(resultado); </span>
+            }
+<span class="nc" id="L114">            resultado.close();</span>
+<span class="nc" id="L115">            return empleado;    </span>
+<span class="nc" id="L116">        } catch (Exception e) {</span>
+<span class="nc" id="L117">            throw ExcepcionSQL.crearErrorConsultar();</span>
+        }        
+    }   
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

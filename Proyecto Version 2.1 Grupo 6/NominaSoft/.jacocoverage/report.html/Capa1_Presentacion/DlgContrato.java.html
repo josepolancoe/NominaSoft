@@ -1,0 +1,544 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DlgContrato.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;NominaSoft&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">Capa1_Presentacion</a> &gt; <span class="el_source">DlgContrato.java</span></div><h1>DlgContrato.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Capa1_Presentacion;
+
+import Capa2_Aplicacion.ServGestionarAfp;
+import Capa2_Aplicacion.ServGestionarContrato;
+import Capa2_Aplicacion.ServGestionarEmpleado;
+import Capa3_Dominio.Afp;
+import Capa3_Dominio.Contrato;
+import Capa3_Dominio.Empleado;
+import Capa5_Excepcion.Mensaje;
+import Capa6_Globales.Objeto;
+import Capa6_Globales.VGlobales;
+import com.toedter.calendar.JTextFieldDateEditor;
+import java.awt.Color;
+import java.util.Date;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+
+/**
+ *
+ * @author lucab
+ */
+public class DlgContrato extends javax.swing.JDialog {
+
+    /**
+     * Creates new form DlgContrato
+     */
+    private Contrato contrato;
+    private Contrato ultimocontrato;
+    private Empleado empleado;
+    private Afp afp;
+    private List&lt;Afp&gt; listaAfps;
+    private List&lt;Contrato&gt; listaContratos;
+    private DefaultComboBoxModel modeloAfp;
+    private Objeto datosAfp;
+    
+    public DlgContrato(java.awt.Frame parent, boolean modal) {
+<span class="nc" id="L44">        super(parent, modal);</span>
+<span class="nc" id="L45">        initComponents();</span>
+<span class="nc" id="L46">        this .getContentPane().setBackground(new Color(255,255,255));</span>
+<span class="nc" id="L47">        setLocationRelativeTo(null);</span>
+<span class="nc" id="L48">        setResizable(false); </span>
+<span class="nc" id="L49">        setTitle(&quot;Contrato&quot;);  </span>
+<span class="nc" id="L50">        EstadoInicio();</span>
+<span class="nc" id="L51">    }</span>
+
+    void EstadoInicio(){
+<span class="nc bnc" id="L54" title="All 2 branches missed.">        if(VGlobales.globalDNI.compareTo(&quot;&quot;)!=0){</span>
+<span class="nc" id="L55">        VerificarEmpleado(VGlobales.globalDNI);</span>
+        }
+<span class="nc" id="L57">        LlenarCombo();</span>
+<span class="nc" id="L58">        txtCodigo.setEditable(false);</span>
+<span class="nc" id="L59">        txtCondicion.setEditable(false);</span>
+<span class="nc" id="L60">        jdcFechaInicioContrato.requestFocus();</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">        if(VGlobales.globalEstadoContrato.compareTo(&quot;Crear&quot;) ==0){</span>
+<span class="nc" id="L62">            LimpiarEntradas();</span>
+<span class="nc" id="L63">            btnRegistrar.setText(&quot;Guardar&quot;);        </span>
+        }else{
+<span class="nc" id="L65">            VerificarContrato(VGlobales.globalIdContrato);</span>
+<span class="nc" id="L66">            MostrarDatos(contrato);</span>
+<span class="nc" id="L67">            btnRegistrar.setText(&quot;Actualizar&quot;); </span>
+            
+        }
+<span class="nc" id="L70">    }</span>
+    
+    void LimpiarEntradas(){
+<span class="nc" id="L73">        txtCodigo.setText(&quot;&quot;);     </span>
+<span class="nc" id="L74">        jdcFechaInicioContrato.setCalendar(null);</span>
+<span class="nc" id="L75">        jdcFechaFinContrato.setCalendar(null);</span>
+<span class="nc" id="L76">        txtCargo.setText(&quot;&quot;);</span>
+<span class="nc" id="L77">        cboAfp.setSelectedIndex(0);</span>
+<span class="nc" id="L78">        chkAsignacion.setSelected(false);</span>
+<span class="nc" id="L79">        txtHorasSemana.setText(&quot;&quot;);</span>
+<span class="nc" id="L80">        txtValorHora.setText(&quot;&quot;);</span>
+<span class="nc" id="L81">        txtCondicion.setText(&quot;&quot;);</span>
+<span class="nc" id="L82">    }      </span>
+    
+    private void LlenarCombo(){  
+<span class="nc" id="L85">        ConsultaAfp();</span>
+<span class="nc" id="L86">        cboAfp.removeAllItems();</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">        if(listaAfps != null){         </span>
+<span class="nc" id="L88">            modeloAfp = new DefaultComboBoxModel();</span>
+<span class="nc" id="L89">            cboAfp.setModel(modeloAfp);           </span>
+<span class="nc" id="L90">            modeloAfp.addElement(new Objeto(&quot;&lt;Seleccionar&gt;&quot;, 0));</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">            for(Afp objetoAfp : listaAfps){</span>
+<span class="nc" id="L92">                datosAfp = new Objeto(objetoAfp.getNombre(), objetoAfp.getIdafp());</span>
+<span class="nc" id="L93">                modeloAfp.addElement(datosAfp);</span>
+<span class="nc" id="L94">            }</span>
+        }else
+<span class="nc" id="L96">                Mensaje.mostrarAdvertencia(this, &quot;Lista vacia&quot;);   </span>
+<span class="nc" id="L97">    }</span>
+    
+    public void seleccionarValorCombo(JComboBox combo, String valor){
+        String item;
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        for (int i = 0; i &lt; combo.getModel().getSize(); i++)</span>
+        {
+<span class="nc" id="L103">            item = combo.getModel().getElementAt(i).toString();</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">            if (item.equalsIgnoreCase(valor))</span>
+            {
+<span class="nc" id="L106">                combo.setSelectedItem(item);</span>
+                //OJOOOO!!!!
+<span class="nc" id="L108">                combo.setSelectedIndex(i);</span>
+<span class="nc" id="L109">                break;</span>
+            }
+        }
+<span class="nc" id="L112">    }  </span>
+    
+    public void VerificarEmpleado(String parDni){           
+        try{
+<span class="nc" id="L116">            ServGestionarEmpleado gestionarEmpleado = new ServGestionarEmpleado();</span>
+<span class="nc" id="L117">            empleado = gestionarEmpleado.VerificarEmpleado(parDni);  </span>
+<span class="nc" id="L118">        }catch (Exception e) {   </span>
+<span class="nc" id="L119">            Mensaje.mostrarError(this, &quot;Error de Registro Empleado&quot;);            </span>
+<span class="nc" id="L120">        } </span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">        if (empleado == null){</span>
+<span class="nc" id="L122">            Mensaje.mostrarAfirmacion(this, &quot;No exite empleado&quot;);</span>
+        }
+<span class="nc" id="L124">    }</span>
+    
+    public void VerificarAfp(int parIdAfp){             
+        try{
+<span class="nc" id="L128">            ServGestionarAfp gestionarAfp = new ServGestionarAfp();</span>
+<span class="nc" id="L129">            afp = gestionarAfp.VerificarAfp(parIdAfp);  </span>
+<span class="nc" id="L130">        }catch (Exception e) {   </span>
+<span class="nc" id="L131">            Mensaje.mostrarError(this, &quot;Error de Registro Afp&quot;);            </span>
+<span class="nc" id="L132">        } </span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">        if (afp == null){</span>
+<span class="nc" id="L134">            Mensaje.mostrarAfirmacion(this, &quot;No exite Afp&quot;);</span>
+        }
+<span class="nc" id="L136">    }</span>
+    
+    public void ConsultaAfp(){ 
+        try{
+<span class="nc" id="L140">            ServGestionarAfp gestionarAfp = new ServGestionarAfp();</span>
+<span class="nc" id="L141">            listaAfps = gestionarAfp.BuscarAfps();               </span>
+<span class="nc" id="L142">        } catch (Exception e) {</span>
+<span class="nc" id="L143">            Mensaje.mostrarError(this, e.getMessage());   </span>
+<span class="nc" id="L144">        }</span>
+        
+<span class="nc" id="L146">    }</span>
+    
+    public void VerificarContrato(int parIdContrato){
+        try{
+<span class="nc" id="L150">            ServGestionarContrato gestionarContrato = new ServGestionarContrato();</span>
+<span class="nc" id="L151">            contrato = gestionarContrato.VerificarContrato(parIdContrato);  </span>
+<span class="nc" id="L152">        }catch (Exception e) {   </span>
+<span class="nc" id="L153">            Mensaje.mostrarError(this, &quot;Error de Registro&quot;);            </span>
+<span class="nc" id="L154">        } </span>
+//        if (contrato == null){
+//            Mensaje.mostrarAfirmacion(this, &quot;No exite Contrato&quot;);
+//        }
+<span class="nc" id="L158">    }</span>
+    
+    public void BuscarContratos(int parIdEmpleado){           
+        try{
+<span class="nc" id="L162">            ServGestionarContrato gestionarContrato = new ServGestionarContrato();</span>
+<span class="nc" id="L163">            listaContratos = gestionarContrato.BuscarContratos(parIdEmpleado);     </span>
+<span class="nc" id="L164">        }catch (Exception e) {   </span>
+<span class="nc" id="L165">            Mensaje.mostrarError(this, &quot;Error dr Registro&quot;);            </span>
+<span class="nc" id="L166">        }</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">        if (listaContratos == null){</span>
+<span class="nc" id="L168">            Mensaje.mostrarAfirmacion(this, &quot;No exite contratos&quot;);</span>
+        }
+<span class="nc" id="L170">    }  </span>
+        
+    public void VerificarFechaUltimoContrato(String parDni){
+<span class="nc" id="L173">        java.util.Date fechaActual = new java.util.Date();</span>
+<span class="nc" id="L174">        long lonActual = fechaActual.getTime();      </span>
+<span class="nc" id="L175">        java.sql.Date FechaFin = new java.sql.Date(lonActual);           </span>
+<span class="nc" id="L176">        int codigomayor = 0;</span>
+<span class="nc" id="L177">        VerificarEmpleado(parDni);</span>
+<span class="nc bnc" id="L178" title="All 2 branches missed.">        if(empleado != null){</span>
+<span class="nc" id="L179">            int idEmpleado = empleado.getIdempleado();</span>
+<span class="nc" id="L180">            BuscarContratos(idEmpleado);</span>
+<span class="nc bnc" id="L181" title="All 4 branches missed.">            if(listaContratos == null || listaContratos.isEmpty()){</span>
+<span class="nc" id="L182">                ultimocontrato = new Contrato();</span>
+<span class="nc" id="L183">                ultimocontrato.setFechafincontrato(FechaFin);</span>
+            }else{
+<span class="nc bnc" id="L185" title="All 2 branches missed.">                for(Contrato objetoContrato : listaContratos){</span>
+<span class="nc" id="L186">                    int codigo = objetoContrato.getIdcontrato();</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">                    if(codigo &gt; codigomayor)</span>
+<span class="nc" id="L188">                        codigomayor = codigo;</span>
+<span class="nc" id="L189">                }</span>
+<span class="nc" id="L190">                VerificarContrato(codigomayor);</span>
+<span class="nc" id="L191">                ultimocontrato = contrato;</span>
+            }
+        }
+<span class="nc" id="L194">    }    </span>
+    
+    public void MostrarDatos(Contrato parContrato){
+<span class="nc bnc" id="L197" title="All 2 branches missed.">        if(parContrato != null){</span>
+<span class="nc" id="L198">        txtCodigo.setText(String.valueOf(parContrato.getIdcontrato()));</span>
+<span class="nc" id="L199">        jdcFechaInicioContrato.setDate(parContrato.getFechainiciocontrato());</span>
+<span class="nc" id="L200">        jdcFechaFinContrato.setDate(parContrato.getFechafincontrato());               </span>
+<span class="nc" id="L201">        txtCargo.setText(parContrato.getCargo()); </span>
+<span class="nc" id="L202">        int idAfp = parContrato.getAfp().getIdafp();</span>
+<span class="nc" id="L203">        VerificarAfp(idAfp);</span>
+<span class="nc" id="L204">        String Afp = afp.getNombre(); </span>
+<span class="nc" id="L205">        seleccionarValorCombo(cboAfp, Afp);</span>
+      
+<span class="nc bnc" id="L207" title="All 2 branches missed.">        if(parContrato.getAsignacionfamiliar() == true)</span>
+<span class="nc" id="L208">            chkAsignacion.setSelected(true);</span>
+        else
+<span class="nc" id="L210">            chkAsignacion.setSelected(false);        </span>
+<span class="nc" id="L211">            txtHorasSemana.setText(String.valueOf(parContrato.getTotalhoras()));        </span>
+<span class="nc" id="L212">            txtValorHora.setText(String.valueOf(parContrato.getValorhora()));      </span>
+<span class="nc" id="L213">            txtCondicion.setText(parContrato.getCondicion());</span>
+        }
+<span class="nc" id="L215">    }</span>
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+    // &lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot;Generated Code&quot;&gt;//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+<span class="nc" id="L225">        jLabel1 = new javax.swing.JLabel();</span>
+<span class="nc" id="L226">        jdcFechaInicioContrato = new com.toedter.calendar.JDateChooser();</span>
+<span class="nc" id="L227">        jLabel2 = new javax.swing.JLabel();</span>
+<span class="nc" id="L228">        jdcFechaFinContrato = new com.toedter.calendar.JDateChooser();</span>
+<span class="nc" id="L229">        jLabel3 = new javax.swing.JLabel();</span>
+<span class="nc" id="L230">        txtCargo = new javax.swing.JTextField();</span>
+<span class="nc" id="L231">        jLabel4 = new javax.swing.JLabel();</span>
+<span class="nc" id="L232">        cboAfp = new javax.swing.JComboBox&lt;&gt;();</span>
+<span class="nc" id="L233">        jLabel5 = new javax.swing.JLabel();</span>
+<span class="nc" id="L234">        chkAsignacion = new javax.swing.JCheckBox();</span>
+<span class="nc" id="L235">        jLabel6 = new javax.swing.JLabel();</span>
+<span class="nc" id="L236">        txtHorasSemana = new javax.swing.JTextField();</span>
+<span class="nc" id="L237">        jLabel7 = new javax.swing.JLabel();</span>
+<span class="nc" id="L238">        txtValorHora = new javax.swing.JTextField();</span>
+<span class="nc" id="L239">        btnRegistrar = new javax.swing.JButton();</span>
+<span class="nc" id="L240">        btnCancelar = new javax.swing.JButton();</span>
+<span class="nc" id="L241">        jLabel8 = new javax.swing.JLabel();</span>
+<span class="nc" id="L242">        txtCodigo = new javax.swing.JTextField();</span>
+<span class="nc" id="L243">        jLabel9 = new javax.swing.JLabel();</span>
+<span class="nc" id="L244">        txtCondicion = new javax.swing.JTextField();</span>
+<span class="nc" id="L245">        jLabel10 = new javax.swing.JLabel();</span>
+<span class="nc" id="L246">        jLabel11 = new javax.swing.JLabel();</span>
+
+<span class="nc" id="L248">        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);</span>
+<span class="nc" id="L249">        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());</span>
+
+<span class="nc" id="L251">        jLabel1.setText(&quot;Fecha Inicio:&quot;);</span>
+<span class="nc" id="L252">        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 100, 20));</span>
+
+<span class="nc" id="L254">        jdcFechaInicioContrato.addPropertyChangeListener(new java.beans.PropertyChangeListener() {</span>
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+<span class="nc" id="L256">                jdcFechaInicioContratoPropertyChange(evt);</span>
+<span class="nc" id="L257">            }</span>
+        });
+<span class="nc" id="L259">        getContentPane().add(jdcFechaInicioContrato, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 50, 160, -1));</span>
+
+<span class="nc" id="L261">        jLabel2.setText(&quot;Fecha Fin:&quot;);</span>
+<span class="nc" id="L262">        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, -1, 20));</span>
+
+<span class="nc" id="L264">        jdcFechaFinContrato.addPropertyChangeListener(new java.beans.PropertyChangeListener() {</span>
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+<span class="nc" id="L266">                jdcFechaFinContratoPropertyChange(evt);</span>
+<span class="nc" id="L267">            }</span>
+        });
+<span class="nc" id="L269">        getContentPane().add(jdcFechaFinContrato, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 80, 160, -1));</span>
+
+<span class="nc" id="L271">        jLabel3.setText(&quot;Cargo:&quot;);</span>
+<span class="nc" id="L272">        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, -1, 20));</span>
+<span class="nc" id="L273">        getContentPane().add(txtCargo, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 110, 160, -1));</span>
+
+<span class="nc" id="L275">        jLabel4.setText(&quot;Afp Asociada:&quot;);</span>
+<span class="nc" id="L276">        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, -1, 20));</span>
+
+<span class="nc" id="L278">        cboAfp.addActionListener(new java.awt.event.ActionListener() {</span>
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L280">                cboAfpActionPerformed(evt);</span>
+<span class="nc" id="L281">            }</span>
+        });
+<span class="nc" id="L283">        getContentPane().add(cboAfp, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 140, 140, -1));</span>
+
+<span class="nc" id="L285">        jLabel5.setText(&quot;Asignacion Familiar:&quot;);</span>
+<span class="nc" id="L286">        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, -1, 20));</span>
+
+<span class="nc" id="L288">        chkAsignacion.setText(&quot;Si&quot;);</span>
+<span class="nc" id="L289">        getContentPane().add(chkAsignacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 170, -1, -1));</span>
+
+<span class="nc" id="L291">        jLabel6.setText(&quot;Horas/Semana:&quot;);</span>
+<span class="nc" id="L292">        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, -1, 20));</span>
+<span class="nc" id="L293">        getContentPane().add(txtHorasSemana, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 200, 60, -1));</span>
+
+<span class="nc" id="L295">        jLabel7.setText(&quot;Valor/Hora:&quot;);</span>
+<span class="nc" id="L296">        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, -1, 20));</span>
+<span class="nc" id="L297">        getContentPane().add(txtValorHora, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 230, 60, -1));</span>
+
+<span class="nc" id="L299">        btnRegistrar.setText(&quot;Registrar&quot;);</span>
+<span class="nc" id="L300">        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {</span>
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L302">                btnRegistrarActionPerformed(evt);</span>
+<span class="nc" id="L303">            }</span>
+        });
+<span class="nc" id="L305">        getContentPane().add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 300, 100, -1));</span>
+
+<span class="nc" id="L307">        btnCancelar.setText(&quot;Cancelar&quot;);</span>
+<span class="nc" id="L308">        btnCancelar.addActionListener(new java.awt.event.ActionListener() {</span>
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L310">                btnCancelarActionPerformed(evt);</span>
+<span class="nc" id="L311">            }</span>
+        });
+<span class="nc" id="L313">        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 300, 100, -1));</span>
+
+<span class="nc" id="L315">        jLabel8.setText(&quot;Codigo:&quot;);</span>
+<span class="nc" id="L316">        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 50, 20));</span>
+<span class="nc" id="L317">        getContentPane().add(txtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 20, 140, -1));</span>
+
+<span class="nc" id="L319">        jLabel9.setText(&quot;Condicion:&quot;);</span>
+<span class="nc" id="L320">        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, -1, 20));</span>
+<span class="nc" id="L321">        getContentPane().add(txtCondicion, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 260, 140, -1));</span>
+
+<span class="nc" id="L323">        jLabel10.setText(&quot;Horas.&quot;);</span>
+<span class="nc" id="L324">        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 200, -1, 20));</span>
+
+<span class="nc" id="L326">        jLabel11.setText(&quot;Nuevos Soles.&quot;);</span>
+<span class="nc" id="L327">        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 230, -1, 20));</span>
+
+<span class="nc" id="L329">        pack();</span>
+<span class="nc" id="L330">    }// &lt;/editor-fold&gt;//GEN-END:initComponents</span>
+
+    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        // TODO add your handling code here:
+        String Cargo, Condicion, Dni;
+        int HorasSemana;
+        boolean Asignacion;
+        double ValorHora;
+<span class="nc" id="L338">        int idContrato = 0;</span>
+
+//        if(txtCodigo.getText().length() &gt; 0){
+//            idContrato = Integer.parseInt(txtCodigo.getText().trim());
+//        }
+              
+<span class="nc" id="L344">        long dateInicio = 0;</span>
+<span class="nc" id="L345">        Date fechaInicio = jdcFechaInicioContrato.getDate();</span>
+<span class="nc" id="L346">        dateInicio = fechaInicio.getTime();</span>
+<span class="nc" id="L347">        java.sql.Date FechaInicio = new java.sql.Date(dateInicio); </span>
+
+<span class="nc" id="L349">        long dateFin = 0;</span>
+<span class="nc" id="L350">        Date fechaFin = jdcFechaFinContrato.getDate(); </span>
+<span class="nc" id="L351">        dateFin = fechaFin.getTime();</span>
+<span class="nc" id="L352">        java.sql.Date FechaFin = new java.sql.Date(dateFin);   </span>
+<span class="nc" id="L353">        Cargo = (txtCargo.getText());                                           </span>
+<span class="nc" id="L354">        Asignacion = chkAsignacion.isSelected(); </span>
+<span class="nc" id="L355">        HorasSemana = Integer.valueOf(txtHorasSemana.getText()); </span>
+<span class="nc" id="L356">        ValorHora = Double.valueOf(txtValorHora.getText()); </span>
+<span class="nc" id="L357">        Condicion = txtCondicion.getText();</span>
+        
+<span class="nc bnc" id="L359" title="All 2 branches missed.">        if(cboAfp.getSelectedIndex() &gt; 0){</span>
+<span class="nc" id="L360">            int indice = cboAfp.getSelectedIndex();</span>
+<span class="nc" id="L361">            Objeto ObjAfp = (Objeto)modeloAfp.getElementAt(indice);</span>
+<span class="nc" id="L362">            int idAfp =ObjAfp.getCodigo();            </span>
+<span class="nc" id="L363">            VerificarAfp(idAfp);  </span>
+        }
+
+                            
+////////CREAR CONTRATO        
+<span class="nc bnc" id="L368" title="All 2 branches missed.">        if( VGlobales.globalEstadoContrato.compareTo(&quot;Crear&quot;)==0){     </span>
+<span class="nc bnc" id="L369" title="All 6 branches missed.">            if(txtCargo.getText().compareTo(&quot;&quot;)!=0 &amp;&amp; txtHorasSemana.getText().compareTo(&quot;&quot;)!=0 &amp;&amp; txtValorHora.getText().compareTo(&quot;&quot;)!=0</span>
+<span class="nc bnc" id="L370" title="All 4 branches missed.">                 &amp;&amp;   jdcFechaInicioContrato.getDate() != null &amp;&amp; jdcFechaFinContrato.getDate() != null){      </span>
+<span class="nc" id="L371">                        Contrato contratonuevo = new Contrato(empleado, afp, FechaInicio, FechaFin, Cargo, Asignacion, HorasSemana, ValorHora); </span>
+////////////////////////////VERIFICA FECHA INICIO 
+<span class="nc" id="L373">                     VerificarFechaUltimoContrato(VGlobales.globalDNI);        </span>
+<span class="nc bnc" id="L374" title="All 2 branches missed.">                    if(contratonuevo.verificarFechaInicioContratoNuevo(ultimocontrato.getFechafincontrato())== true){                     </span>
+////////////////////////////////VERIFICA FECHA FIN                     
+<span class="nc bnc" id="L376" title="All 2 branches missed.">                        if(contratonuevo.verificarFechaFinContratoNuevo() == true){</span>
+////////////////////////////////////VERIFICA HORAS CONTRATADAS                                    
+<span class="nc bnc" id="L378" title="All 2 branches missed.">                            if(contratonuevo.verificarHorasContratadas()== true){</span>
+////////////////////////////////////////VERIFICAR SUELDO
+<span class="nc bnc" id="L380" title="All 2 branches missed.">                                if(contratonuevo.verificarRangoSueldo() == true){</span>
+                                    try {   
+                                        
+<span class="nc" id="L383">                                        ServGestionarContrato gestionarContrato = new ServGestionarContrato();</span>
+<span class="nc" id="L384">                                        int registros_afectados = gestionarContrato.IngresarContrato(contratonuevo);              </span>
+
+<span class="nc bnc" id="L386" title="All 2 branches missed.">                                        if(registros_afectados == 1){</span>
+<span class="nc" id="L387">                                            JOptionPane.showMessageDialog(null,&quot;Contrato registrado&quot;);</span>
+<span class="nc" id="L388">                                            btnRegistrar.setText(&quot;Actualizar&quot;);</span>
+<span class="nc" id="L389">                                            btnCancelar.setText(&quot;Finalizar&quot;);  </span>
+//                                            VerificarContrato(Dni);
+//                                            MostrarDatos(contrato);
+<span class="nc" id="L392">                                            this.dispose();</span>
+                                        }
+<span class="nc" id="L394">                                    } catch (Exception e) {</span>
+<span class="nc" id="L395">                                        Mensaje.mostrarError(this, &quot;Error de Ingreso Registro&quot;);</span>
+<span class="nc" id="L396">                                    }                                            </span>
+                                }else
+<span class="nc" id="L398">                                    JOptionPane.showMessageDialog(null,&quot;Valor sueldo no valido&quot;);</span>
+                            }else
+<span class="nc" id="L400">                                JOptionPane.showMessageDialog(null,&quot;Horas Contratadas no validas&quot;);                                   </span>
+                        }else
+<span class="nc" id="L402">                            JOptionPane.showMessageDialog(null,&quot;Fecha fin no valida&quot;);       </span>
+                    }else
+<span class="nc" id="L404">                        JOptionPane.showMessageDialog(null,&quot;Fecha Inicio no valida&quot;);</span>
+<span class="nc" id="L405">            } else</span>
+<span class="nc" id="L406">                JOptionPane.showMessageDialog(null,&quot;Faltan llenar datos&quot;);</span>
+////////EDITAR CONTRATO            
+<span class="nc bnc" id="L408" title="All 2 branches missed.">        }else if(VGlobales.globalEstadoContrato.compareTo(&quot;Editar&quot;)==0){</span>
+<span class="nc bnc" id="L409" title="All 6 branches missed.">            if(txtCargo.getText().compareTo(&quot;&quot;)!=0 &amp;&amp; txtHorasSemana.getText().compareTo(&quot;&quot;)!=0 &amp;&amp; txtValorHora.getText().compareTo(&quot;&quot;)!=0     </span>
+<span class="nc bnc" id="L410" title="All 4 branches missed.">                 &amp;&amp;   jdcFechaInicioContrato.getDate() != null &amp;&amp; jdcFechaFinContrato.getDate() != null){   </span>
+
+<span class="nc" id="L412">                Contrato contratoactualizado = new Contrato(idContrato, empleado, afp, FechaInicio, FechaFin, Cargo, Asignacion, HorasSemana, ValorHora, Condicion); </span>
+            ////////////////////////////VERIFICA FECHA INICIO  
+<span class="nc bnc" id="L414" title="All 2 branches missed.">                    if(contratoactualizado.verificarFechaInicioContratoNuevo(ultimocontrato.getFechafincontrato())== true){                     </span>
+////////////////////////////////VERIFICA FECHA FIN                     
+<span class="nc bnc" id="L416" title="All 2 branches missed.">                        if(contratoactualizado.verificarFechaFinContratoNuevo() == true){</span>
+////////////////////////////////////VERIFICA HORAS CONTRATADAS                                    
+<span class="nc bnc" id="L418" title="All 2 branches missed.">                            if(contratoactualizado.verificarHorasContratadas()== true){</span>
+////////////////////////////////////////VERIFICAR SUELDO
+<span class="nc bnc" id="L420" title="All 2 branches missed.">                                if(contratoactualizado.verificarRangoSueldo() == true){</span>
+                                    try {                                           
+<span class="nc" id="L422">                                        ServGestionarContrato gestionarContrato = new ServGestionarContrato();</span>
+<span class="nc" id="L423">                                        int registros_afectados = gestionarContrato.ModificarContrato(contratoactualizado);              </span>
+
+<span class="nc bnc" id="L425" title="All 2 branches missed.">                                        if(registros_afectados == 1){</span>
+<span class="nc" id="L426">                                            JOptionPane.showMessageDialog(null,&quot;Contrato registrado&quot;);</span>
+<span class="nc" id="L427">                                            btnRegistrar.setText(&quot;Actualizar&quot;);</span>
+<span class="nc" id="L428">                                            btnCancelar.setText(&quot;Finalizar&quot;);  </span>
+//                                            VerificarContrato(Dni);
+//                                            MostrarDatos(contrato);
+<span class="nc" id="L431">                                            this.dispose();</span>
+                                        }
+<span class="nc" id="L433">                                    } catch (Exception e) {</span>
+<span class="nc" id="L434">                                        Mensaje.mostrarError(this, &quot;Error de Ingreso Registro&quot;);</span>
+<span class="nc" id="L435">                                    }                                            </span>
+                                }else
+<span class="nc" id="L437">                                    JOptionPane.showMessageDialog(null,&quot;Valor sueldo no valido&quot;);</span>
+                            }else
+<span class="nc" id="L439">                                JOptionPane.showMessageDialog(null,&quot;Horas Contratadas no validas&quot;);                                   </span>
+                        }else
+<span class="nc" id="L441">                            JOptionPane.showMessageDialog(null,&quot;Fecha fin no valida&quot;);       </span>
+                    }else
+<span class="nc" id="L443">                        JOptionPane.showMessageDialog(null,&quot;Fecha Inicio no valida&quot;);</span>
+<span class="nc" id="L444">            } else</span>
+<span class="nc" id="L445">                JOptionPane.showMessageDialog(null,&quot;Faltan llenar datos&quot;); </span>
+        }
+
+<span class="nc" id="L448">    }//GEN-LAST:event_btnRegistrarActionPerformed</span>
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+<span class="nc" id="L452">        VGlobales.globalIdContrato = 0;</span>
+<span class="nc" id="L453">        VGlobales.globalEstadoContrato = &quot;&quot;;</span>
+<span class="nc" id="L454">        VGlobales.globalDNI = &quot;&quot;;</span>
+<span class="nc" id="L455">        LimpiarEntradas();</span>
+<span class="nc" id="L456">        this.dispose();</span>
+<span class="nc" id="L457">    }//GEN-LAST:event_btnCancelarActionPerformed</span>
+
+    private void cboAfpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboAfpActionPerformed
+        // TODO add your handling code here:
+<span class="nc" id="L461">    }//GEN-LAST:event_cboAfpActionPerformed</span>
+
+    private void jdcFechaInicioContratoPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jdcFechaInicioContratoPropertyChange
+        // TODO add your handling code here:
+<span class="nc" id="L465">        jdcFechaInicioContrato.getJCalendar().setMinSelectableDate(new Date());</span>
+<span class="nc" id="L466">        ((JTextFieldDateEditor)jdcFechaInicioContrato.getDateEditor()).setEditable(false);</span>
+        
+        
+<span class="nc" id="L469">    }//GEN-LAST:event_jdcFechaInicioContratoPropertyChange</span>
+
+    private void jdcFechaFinContratoPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jdcFechaFinContratoPropertyChange
+        // TODO add your handling code here:
+<span class="nc" id="L473">        jdcFechaFinContrato.getJCalendar().setMinSelectableDate(new Date());</span>
+<span class="nc" id="L474">        ((JTextFieldDateEditor)jdcFechaFinContrato.getDateEditor()).setEditable(false);</span>
+<span class="nc" id="L475">    }//GEN-LAST:event_jdcFechaFinContratoPropertyChange</span>
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //&lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot; Look and feel setting code (optional) &quot;&gt;
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+<span class="nc bnc" id="L487" title="All 2 branches missed.">            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {</span>
+<span class="nc bnc" id="L488" title="All 2 branches missed.">                if (&quot;Nimbus&quot;.equals(info.getName())) {</span>
+<span class="nc" id="L489">                    javax.swing.UIManager.setLookAndFeel(info.getClassName());</span>
+<span class="nc" id="L490">                    break;</span>
+                }
+            }
+<span class="nc" id="L493">        } catch (ClassNotFoundException ex) {</span>
+<span class="nc" id="L494">            java.util.logging.Logger.getLogger(DlgContrato.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L495">        } catch (InstantiationException ex) {</span>
+<span class="nc" id="L496">            java.util.logging.Logger.getLogger(DlgContrato.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L497">        } catch (IllegalAccessException ex) {</span>
+<span class="nc" id="L498">            java.util.logging.Logger.getLogger(DlgContrato.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L499">        } catch (javax.swing.UnsupportedLookAndFeelException ex) {</span>
+<span class="nc" id="L500">            java.util.logging.Logger.getLogger(DlgContrato.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L501">        }</span>
+        //&lt;/editor-fold&gt;
+
+        /* Create and display the dialog */
+<span class="nc" id="L505">        java.awt.EventQueue.invokeLater(new Runnable() {</span>
+            public void run() {
+<span class="nc" id="L507">                DlgContrato dialog = new DlgContrato(new javax.swing.JFrame(), true);</span>
+<span class="nc" id="L508">                dialog.addWindowListener(new java.awt.event.WindowAdapter() {</span>
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+<span class="nc" id="L511">                        System.exit(0);</span>
+<span class="nc" id="L512">                    }</span>
+                });
+<span class="nc" id="L514">                dialog.setVisible(true);</span>
+<span class="nc" id="L515">            }</span>
+        });
+<span class="nc" id="L517">    }</span>
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnRegistrar;
+    private javax.swing.JComboBox&lt;String&gt; cboAfp;
+    private javax.swing.JCheckBox chkAsignacion;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private com.toedter.calendar.JDateChooser jdcFechaFinContrato;
+    private com.toedter.calendar.JDateChooser jdcFechaInicioContrato;
+    private javax.swing.JTextField txtCargo;
+    private javax.swing.JTextField txtCodigo;
+    private javax.swing.JTextField txtCondicion;
+    private javax.swing.JTextField txtHorasSemana;
+    private javax.swing.JTextField txtValorHora;
+    // End of variables declaration//GEN-END:variables
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
