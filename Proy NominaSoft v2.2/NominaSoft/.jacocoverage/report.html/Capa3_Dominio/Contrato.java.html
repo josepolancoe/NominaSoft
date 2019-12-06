@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Contrato.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;NominaSoft&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">Capa3_Dominio</a> &gt; <span class="el_source">Contrato.java</span></div><h1>Contrato.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Capa3_Dominio;
+import java.sql.Date;
+import java.util.Calendar;
+
+public class Contrato {
+    int idcontrato;
+    Empleado empleado;
+    Afp afp;
+    Date fechainiciocontrato;
+    Date fechafincontrato;
+    String cargo;
+    boolean asignacionfamiliar;
+    int totalhoras;
+    double valorhora;
+    String condicion;
+
+<span class="nc" id="L22">    public Contrato(Empleado empleado, Afp afp, Date fechainiciocontrato, Date fechafincontrato, String cargo, boolean asignacionfamiliar, int totalhoras, double valorhora) {</span>
+<span class="nc" id="L23">        this.empleado = empleado;</span>
+<span class="nc" id="L24">        this.afp = afp;</span>
+<span class="nc" id="L25">        this.fechainiciocontrato = fechainiciocontrato;</span>
+<span class="nc" id="L26">        this.fechafincontrato = fechafincontrato;</span>
+<span class="nc" id="L27">        this.cargo = cargo;</span>
+<span class="nc" id="L28">        this.asignacionfamiliar = asignacionfamiliar;</span>
+<span class="nc" id="L29">        this.totalhoras = totalhoras;</span>
+<span class="nc" id="L30">        this.valorhora = valorhora;</span>
+<span class="nc" id="L31">    }</span>
+  
+    
+<span class="nc" id="L34">    public Contrato(int idcontrato, Empleado empleado, Afp afp, Date fechainiciocontrato, Date fechafincontrato, String cargo, boolean asignacionfamiliar, int totalhoras, double valorhora, String condicion) {</span>
+<span class="nc" id="L35">        this.idcontrato = idcontrato;</span>
+<span class="nc" id="L36">        this.empleado = empleado;</span>
+<span class="nc" id="L37">        this.afp = afp;</span>
+<span class="nc" id="L38">        this.fechainiciocontrato = fechainiciocontrato;</span>
+<span class="nc" id="L39">        this.fechafincontrato = fechafincontrato;</span>
+<span class="nc" id="L40">        this.cargo = cargo;</span>
+<span class="nc" id="L41">        this.asignacionfamiliar = asignacionfamiliar;</span>
+<span class="nc" id="L42">        this.totalhoras = totalhoras;</span>
+<span class="nc" id="L43">        this.valorhora = valorhora;</span>
+<span class="nc" id="L44">        this.condicion = condicion;</span>
+<span class="nc" id="L45">    }</span>
+
+<span class="fc" id="L47">    public Contrato() {</span>
+<span class="fc" id="L48">    }</span>
+
+    
+    public int getIdcontrato() {
+<span class="fc" id="L52">        return idcontrato;</span>
+    }
+
+    public void setIdcontrato(int idcontrato) {
+<span class="fc" id="L56">        this.idcontrato = idcontrato;</span>
+<span class="fc" id="L57">    }</span>
+
+    public Empleado getEmpleado() {
+<span class="nc" id="L60">        return empleado;</span>
+    }
+
+    public void setEmpleado(Empleado empleado) {
+<span class="fc" id="L64">        this.empleado = empleado;</span>
+<span class="fc" id="L65">    }</span>
+
+    public Afp getAfp() {
+<span class="fc" id="L68">        return afp;</span>
+    }
+
+    public void setAfp(Afp afp) {
+<span class="fc" id="L72">        this.afp = afp;</span>
+<span class="fc" id="L73">    }</span>
+
+    public Date getFechainiciocontrato() {
+<span class="nc" id="L76">        return fechainiciocontrato;</span>
+    }
+
+    public void setFechainiciocontrato(Date fechainiciocontrato) {
+<span class="fc" id="L80">        this.fechainiciocontrato = fechainiciocontrato;</span>
+<span class="fc" id="L81">    }</span>
+
+    public Date getFechafincontrato() {
+<span class="fc" id="L84">        return fechafincontrato;</span>
+    }
+
+    public void setFechafincontrato(Date fechafincontrato) {
+<span class="fc" id="L88">        this.fechafincontrato = fechafincontrato;</span>
+<span class="fc" id="L89">    }</span>
+
+    public String getCargo() {
+<span class="nc" id="L92">        return cargo;</span>
+    }
+
+    public void setCargo(String cargo) {
+<span class="nc" id="L96">        this.cargo = cargo;</span>
+<span class="nc" id="L97">    }</span>
+
+    public boolean getAsignacionfamiliar() {
+<span class="nc" id="L100">        return asignacionfamiliar;</span>
+    }
+
+    public void setAsignacionfamiliar(boolean asignacionfamiliar) {
+<span class="fc" id="L104">        this.asignacionfamiliar = asignacionfamiliar;</span>
+<span class="fc" id="L105">    }</span>
+
+    public int getTotalhoras() {
+<span class="fc" id="L108">        return totalhoras;</span>
+    }
+
+    public void setTotalhoras(int totalhoras) {
+<span class="fc" id="L112">        this.totalhoras = totalhoras;</span>
+<span class="fc" id="L113">    }</span>
+
+    public double getValorhora() {
+<span class="fc" id="L116">        return valorhora;</span>
+    }
+
+    public void setValorhora(double valorhora) {
+<span class="fc" id="L120">        this.valorhora = valorhora;</span>
+<span class="fc" id="L121">    }</span>
+
+    public String getCondicion() {
+<span class="fc" id="L124">        return condicion;</span>
+    }
+
+    public void setCondicion(String condicion) {
+<span class="fc" id="L128">        this.condicion = condicion;</span>
+<span class="fc" id="L129">    }</span>
+    
+     public double cacularAsignacionFamiliar(){
+<span class="fc bfc" id="L132" title="All 2 branches covered.">        if(asignacionfamiliar==true){</span>
+<span class="fc" id="L133">             return 930*0.1;</span>
+        }else
+<span class="fc" id="L135">            return 0.0;</span>
+     }
+    public Boolean verificarContratoVigente(){
+<span class="fc" id="L138">     java.util.Date fechaActual = new java.util.Date();</span>
+<span class="pc bpc" id="L139" title="1 of 4 branches missed.">        return fechafincontrato.getTime() &gt;= fechaActual.getTime() &amp;&amp; condicion.compareToIgnoreCase(&quot;ANULADO&quot;)!=0; </span>
+    }
+    
+    public Boolean verificaEstadoContrato(){
+<span class="fc" id="L143">        java.util.Date fechaActual = new java.util.Date();</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">        return fechafincontrato.getTime() &gt;= fechaActual.getTime(); </span>
+    }
+    
+    public Boolean verificarHorasContratadas(){
+<span class="pc bpc" id="L148" title="1 of 4 branches missed.">        return totalhoras &gt;= 8 &amp;&amp; totalhoras &lt;= 40;</span>
+    }
+    
+    public Boolean verificarValorHora(){
+        boolean respuesta;       
+<span class="pc bpc" id="L153" title="8 of 26 branches missed.">	switch (empleado.getGradoacademico()) {</span>
+		case &quot;Primaria&quot;:
+<span class="pc bpc" id="L155" title="1 of 4 branches missed.">                        if(valorhora &gt;=5 &amp;&amp; valorhora &lt;= 10){</span>
+<span class="fc" id="L156">                            respuesta = true;</span>
+<span class="fc" id="L157">                            break;</span>
+                        }else{
+<span class="fc" id="L159">                            respuesta = false;</span>
+<span class="fc" id="L160">                            break;</span>
+                        }
+		case &quot;Secundaria&quot;:
+<span class="pc bpc" id="L163" title="1 of 4 branches missed.">                        if(valorhora &gt;=5 &amp;&amp; valorhora &lt;= 10){</span>
+<span class="fc" id="L164">                            respuesta = true;</span>
+<span class="fc" id="L165">                            break;</span>
+                        }else{
+<span class="fc" id="L167">                            respuesta = false;</span>
+<span class="fc" id="L168">                            break;</span>
+                        }        
+		case &quot;Bachiller&quot;:
+<span class="pc bpc" id="L171" title="1 of 4 branches missed.">                        if (valorhora &gt;=11 &amp;&amp; valorhora &lt;= 20){</span>
+<span class="fc" id="L172">                            respuesta = true;</span>
+<span class="fc" id="L173">                            break;</span>
+                        }else{
+<span class="fc" id="L175">                            respuesta = false;</span>
+<span class="fc" id="L176">                            break;</span>
+                        }        
+		case &quot;Profesional&quot;:
+<span class="pc bpc" id="L179" title="1 of 4 branches missed.">                        if (valorhora &gt;=21 &amp;&amp; valorhora &lt;= 30){</span>
+<span class="fc" id="L180">                            respuesta = true;</span>
+<span class="fc" id="L181">                            break;</span>
+                        }else{
+<span class="fc" id="L183">                            respuesta = false;</span>
+<span class="fc" id="L184">                            break;</span>
+                        }       
+		case &quot;Magister&quot;:
+<span class="pc bpc" id="L187" title="1 of 4 branches missed.">                        if (valorhora &gt;=31  &amp;&amp; valorhora &lt;= 40){</span>
+<span class="fc" id="L188">                            respuesta = true;</span>
+<span class="fc" id="L189">                            break;</span>
+                        }else{
+<span class="fc" id="L191">                            respuesta = false;</span>
+<span class="fc" id="L192">                            break;</span>
+                        }        
+                case &quot;Doctor&quot;:
+<span class="pc bpc" id="L195" title="1 of 4 branches missed.">                        if (valorhora &gt;=41 &amp;&amp; valorhora &lt;= 60){</span>
+<span class="fc" id="L196">                            respuesta = true;</span>
+<span class="fc" id="L197">                            break;</span>
+                        }else{
+<span class="fc" id="L199">                            respuesta = false;</span>
+<span class="fc" id="L200">                            break;</span>
+                        }  
+                default:
+<span class="nc" id="L203">                           respuesta = false;</span>
+	}
+<span class="fc" id="L205">        return respuesta;</span>
+  
+    }
+    
+    public Boolean verificarFechaInicioContratoNuevo(Contrato contratoAnterior){
+<span class="fc" id="L210">        boolean respuesta = false;       </span>
+<span class="fc bfc" id="L211" title="All 2 branches covered.">        if(contratoAnterior != null){</span>
+<span class="fc" id="L212">            Date fecha = contratoAnterior.getFechafincontrato();</span>
+<span class="fc bfc" id="L213" title="All 2 branches covered.">            if(fechainiciocontrato.getTime()&gt; fecha.getTime() </span>
+<span class="fc bfc" id="L214" title="All 2 branches covered.">                    || contratoAnterior.getCondicion().equalsIgnoreCase(&quot;Anulado&quot;) </span>
+<span class="pc bpc" id="L215" title="1 of 2 branches missed.">                    || contratoAnterior.getIdcontrato() == idcontrato)</span>
+<span class="fc" id="L216">                respuesta = true;</span>
+<span class="fc" id="L217">        }else</span>
+<span class="fc" id="L218">            respuesta = true;</span>
+<span class="fc" id="L219">        return respuesta;</span>
+    }
+
+ public Boolean verificarFechaFinContratoNuevo(){
+     
+<span class="fc" id="L224">            Calendar inicio = Calendar.getInstance();</span>
+<span class="fc" id="L225">            Calendar fin = Calendar.getInstance();</span>
+<span class="fc" id="L226">            inicio.setTime(fechainiciocontrato);</span>
+<span class="fc" id="L227">            fin.setTime(fechafincontrato);</span>
+<span class="fc" id="L228">            int dias=-1;</span>
+            
+<span class="fc bfc" id="L230" title="All 4 branches covered.">            while(inicio.before(fin)||inicio.equals(fin)){</span>
+<span class="fc" id="L231">                dias++;</span>
+<span class="fc" id="L232">                inicio.add(Calendar.DATE,1); </span>
+            }
+<span class="pc bpc" id="L234" title="1 of 4 branches missed.">            return dias&gt;=90 &amp;&amp; 366&gt;=dias;</span>
+        
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>VerificaDniEmpleado.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;NominaSoft&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">Capa1_Presentacion</a> &gt; <span class="el_source">VerificaDniEmpleado.java</span></div><h1>VerificaDniEmpleado.java</h1><pre class="source lang-java linenums">package Capa1_Presentacion;
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+import Capa2_Aplicacion.ServGestionarEmpleado;
+import Capa3_Dominio.Empleado;
+import Capa5_Excepcion.Mensaje;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
+/**
+ *
+ * @author lucab
+ */
+public class VerificaDniEmpleado extends JDialog {    
+    private transient Set&lt;Integer&gt; ingresoTeclaInt;
+    private transient Set&lt;Character&gt; ingresoTeclaChr;
+    JLabel lblDni;
+    JTextField txtDni;
+    JButton btnAceptar, btnCancelar;
+<span class="nc" id="L38">    String ingreso = &quot;&quot;, respuesta = &quot;&quot;,  tecla = &quot;&quot;,  obtenerDni = &quot;&quot;;</span>
+<span class="nc" id="L39">    int i = 0, j = 0; </span>
+<span class="nc" id="L40">    boolean cancelar = false;</span>
+<span class="nc" id="L41">    transient Empleado empleado = null;</span>
+    
+////////////////////////////////////////////////////////////////////////////////    
+    public VerificaDniEmpleado(java.awt.Frame parent, boolean modal) {    
+<span class="nc" id="L45">        super(parent, modal);</span>
+//        this.pack();
+<span class="nc" id="L47">        this.setResizable(false);</span>
+<span class="nc" id="L48">        this.setTitle(&quot;Verificar DNI&quot;);</span>
+<span class="nc" id="L49">        this.setSize(240, 126);          </span>
+<span class="nc" id="L50">        this.setLocationRelativeTo(null);       </span>
+<span class="nc" id="L51">        this.getContentPane().setLayout(null);</span>
+<span class="nc" id="L52">        this.getContentPane().setBackground(new Color(153,153,153));</span>
+
+////////////////////////////////////////////////////////////////////////////////
+<span class="nc" id="L55">        ingresoTeclaInt = new HashSet&lt;Integer&gt;();</span>
+<span class="nc" id="L56">        ingresoTeclaChr = new HashSet&lt;Character&gt;();</span>
+
+////////////////////////////////////////////////////////////////////////////////
+
+<span class="nc" id="L60">        Font fuente = new Font(&quot;Arial&quot;, 1, 12);</span>
+<span class="nc" id="L61">        Color color = new Color(255,255,255);</span>
+<span class="nc" id="L62">        lblDni = new JLabel(&quot;DNI aqui: &quot;);</span>
+<span class="nc" id="L63">        lblDni.setFont(fuente);</span>
+<span class="nc" id="L64">        lblDni.setForeground(color);</span>
+<span class="nc" id="L65">        txtDni = new JTextField();</span>
+<span class="nc" id="L66">        btnAceptar = new JButton(&quot;Verificar&quot;);</span>
+<span class="nc" id="L67">        btnCancelar = new JButton(&quot;Cancelar&quot;);</span>
+<span class="nc" id="L68">        btnAceptar.setBounds(22, 49, 89, 25);</span>
+<span class="nc" id="L69">        btnCancelar.setBounds(129, 49, 89, 25);</span>
+<span class="nc" id="L70">        lblDni.setBounds(34, 10, 99, 25);</span>
+<span class="nc" id="L71">        txtDni.setBounds(93, 11, 99, 25);</span>
+<span class="nc" id="L72">        this.getContentPane().add(lblDni);</span>
+<span class="nc" id="L73">        this.getContentPane().add(txtDni);</span>
+<span class="nc" id="L74">        this.getContentPane().add(btnAceptar);</span>
+<span class="nc" id="L75">        this.getContentPane().add(btnCancelar);</span>
+
+////////////////////////////////////////////////////////////////////////////////        
+<span class="nc" id="L78">        btnAceptar.addActionListener(new ActionListener() {   </span>
+            public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L80">                verificarDni();</span>
+<span class="nc" id="L81">            }</span>
+        });
+<span class="nc" id="L83">        btnCancelar.addActionListener(new ActionListener() {   </span>
+            public void actionPerformed(ActionEvent e) { 
+<span class="nc" id="L85">                cancelarDni();</span>
+<span class="nc" id="L86">                dispose();</span>
+<span class="nc" id="L87">            }	</span>
+        });
+     
+////////////////////////////////////////////////////////////////////////////////        
+        KeyListener eventoTeclado;
+<span class="nc" id="L92">        eventoTeclado = new KeyListener() {</span>
+            @Override
+            public void keyTyped(KeyEvent ke) {
+<span class="nc" id="L95">                txtDni.setText(ingreso); </span>
+<span class="nc" id="L96">            }</span>
+   
+            @Override
+            public void keyPressed(KeyEvent ke) {
+<span class="nc" id="L100">                ingresoTeclaChr.add(ke.getKeyChar()); </span>
+                
+<span class="nc bnc" id="L102" title="All 2 branches missed.">                if(ke.getKeyCode()==KeyEvent.VK_ESCAPE){</span>
+<span class="nc" id="L103">                    dispose();</span>
+                    
+                }
+                
+<span class="nc bnc" id="L107" title="All 2 branches missed.">                if(ke.getKeyCode()==KeyEvent.VK_ENTER){</span>
+<span class="nc" id="L108">                    verificarDni();</span>
+                }
+                
+                
+<span class="nc bnc" id="L112" title="All 2 branches missed.">                if(ingresoTeclaChr.size() &gt; 1){                                      </span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">                    for (Iterator&lt;Character&gt; recorrer = ingresoTeclaChr.iterator(); recorrer.hasNext(); ) </span>
+                    { 
+<span class="nc" id="L115">                        tecla = String.valueOf(recorrer.next());</span>
+<span class="nc" id="L116">                        break;</span>
+                    }
+                }else
+<span class="nc" id="L119">                     tecla =  String.valueOf(ke.getKeyChar());         </span>
+<span class="nc" id="L120">            }</span>
+            
+            @Override
+            public void keyReleased(KeyEvent ke) {
+<span class="nc" id="L124">                    String patron = &quot;0123456789&quot;;                    </span>
+<span class="nc bnc" id="L125" title="All 4 branches missed.">                    if(!patron.contains(String.valueOf(ke.getKeyChar())) || txtDni.getText().length() == 9){</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">                        if(ke.getKeyCode() != KeyEvent.VK_BACK_SPACE){</span>
+<span class="nc" id="L127">                            txtDni.setText(ingreso);</span>
+                        }else{
+<span class="nc bnc" id="L129" title="All 2 branches missed.">                            if(ingreso.length() &gt; 0)</span>
+<span class="nc" id="L130">                                j = ingreso.length() - 1;</span>
+<span class="nc" id="L131">                                ingreso = ingreso.substring(0,j);</span>
+<span class="nc" id="L132">                                txtDni.setText(ingreso);             </span>
+                        }
+                    }else{
+<span class="nc" id="L135">                        ingreso = ingreso + tecla;</span>
+<span class="nc" id="L136">                        j = ingreso.length() - 1;</span>
+                    }      
+<span class="nc" id="L138">            tecla = &quot;&quot;;    </span>
+<span class="nc" id="L139">            ingresoTeclaChr.remove(ke.getKeyChar());</span>
+<span class="nc" id="L140">            }</span>
+        };
+<span class="nc" id="L142">        txtDni.addKeyListener(eventoTeclado);      </span>
+////////////////////////////////////////////////////////////////////////////////
+<span class="nc" id="L144">        this.setVisible(true);  </span>
+<span class="nc" id="L145">    } </span>
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////    
+    private void VerificarEmpleado(String parDni){             
+        try{
+<span class="nc" id="L150">            ServGestionarEmpleado gestionarEmpleado = new ServGestionarEmpleado();</span>
+<span class="nc" id="L151">            empleado = gestionarEmpleado.VerificarEmpleado(parDni);  </span>
+<span class="nc" id="L152">        }catch (Exception e) {   </span>
+<span class="nc" id="L153">            Mensaje.mostrarError(this, &quot;Error de Registro&quot;);            </span>
+<span class="nc" id="L154">        }</span>
+<span class="nc" id="L155">    } </span>
+
+    private void verificarDni(){
+<span class="nc bnc" id="L158" title="All 4 branches missed.">        if(txtDni.getText().matches(&quot;([0-9]|\\s)+&quot;) &amp;&amp; txtDni.getText().length() == 8){                         </span>
+<span class="nc" id="L159">            obtenerDni = txtDni.getText();  </span>
+<span class="nc" id="L160">            VerificarEmpleado(obtenerDni);</span>
+<span class="nc bnc" id="L161" title="All 2 branches missed.">            if (empleado == null){</span>
+<span class="nc" id="L162">                Mensaje.mostrarAfirmacion(this, &quot;No exite empleado&quot;);</span>
+<span class="nc" id="L163">                int seleccion = JOptionPane.showConfirmDialog(this,&quot;¿Deseas agregar empleado? &quot;,&quot;!Atencion!&quot;,JOptionPane.YES_NO_OPTION );</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">                if(seleccion == JOptionPane.YES_OPTION) { </span>
+<span class="nc" id="L165">                    DlgEmpleado DE = new DlgEmpleado(null, true);</span>
+<span class="nc" id="L166">                    DE.ObtenerDni(obtenerDni);</span>
+<span class="nc" id="L167">                    DE.setVisible(true); </span>
+<span class="nc" id="L168">                }else</span>
+<span class="nc" id="L169">                    dispose();</span>
+            }
+<span class="nc" id="L171">            dispose(); </span>
+        }else{
+<span class="nc" id="L173">            JOptionPane.showMessageDialog(null,&quot;Ingrese DNI valido&quot;); </span>
+<span class="nc" id="L174">            txtDni.requestFocus(); </span>
+        }
+<span class="nc" id="L176">    } </span>
+    
+    String retornaDni(){
+<span class="nc" id="L179">        return obtenerDni;</span>
+    }
+    
+    Empleado retornaEmpleado(){
+<span class="nc" id="L183">        Empleado obtenerEmpleado = empleado;</span>
+<span class="nc" id="L184">        return obtenerEmpleado;</span>
+    }
+    
+    Boolean cancelarDni(){
+<span class="nc" id="L188">        return cancelar = true;</span>
+    }
+
+    public static void main(String[] args){
+<span class="nc" id="L192">        VerificaDniEmpleado dialog = new VerificaDniEmpleado(new JFrame(), true); </span>
+<span class="nc" id="L193">        dialog.addWindowListener(new java.awt.event.WindowAdapter() {</span>
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+<span class="nc" id="L196">                System.exit(0);</span>
+<span class="nc" id="L197">            }</span>
+        });
+<span class="nc" id="L199">        dialog.setVisible(true);</span>
+<span class="nc" id="L200">    }</span>
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

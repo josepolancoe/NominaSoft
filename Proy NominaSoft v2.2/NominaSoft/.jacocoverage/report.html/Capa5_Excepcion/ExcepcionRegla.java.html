@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ExcepcionRegla.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;NominaSoft&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">Capa5_Excepcion</a> &gt; <span class="el_source">ExcepcionRegla.java</span></div><h1>ExcepcionRegla.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Capa5_Excepcion;
+
+/**
+ *
+ * @author lucab
+ */
+public class ExcepcionRegla extends Exception{
+
+    private static final String MENSAJE_INGRESOINCORRECTO_FECHAINICIO = &quot;Fecha de inicio no valida.&quot;;
+    private static final String MENSAJE_INGRESOINCORRECTO_FECHAFIN = &quot;Fecha fin no valida, el periodo es de 3 a 12 meses.&quot;;
+    private static final String MENSAJE_INGRESOINCORRECTO_HORASXSEMANA = &quot;Horas/Semana no validas, el promedio es de 8 a 40 horas.&quot;;
+    private static final String MENSAJE_INGRESOINCORRECTO_VALORHORA = &quot;Valor/Hora no valido, ingrese valores entre: &quot;;
+    private static final String MENSAJE_SINPERIODO_ACTIVO = &quot;No se puede procesar porque no existe periodo de pago activo.&quot;;
+    private static final String MENSAJE_SINCONTRATOS_VIGENTES = &quot;No se puede procesar porque no existen contratos vigentes&quot;;
+    private static final String MENSAJE_FECHAACTUAL_NO_VALIDA =  &quot;No se puede procesar porque la fecha actual no corresponde a la fecha admitida para procesar pagos.&quot;;
+    
+    private ExcepcionRegla(String message) {
+<span class="nc" id="L23">        super(message);</span>
+<span class="nc" id="L24">    }</span>
+
+    public static ExcepcionRegla crearErrorFechaInicio(){
+<span class="nc" id="L27">        return new ExcepcionRegla(MENSAJE_INGRESOINCORRECTO_FECHAINICIO);</span>
+    }
+
+    public static ExcepcionRegla crearErrorFechaFin(){
+<span class="nc" id="L31">        return new ExcepcionRegla(MENSAJE_INGRESOINCORRECTO_FECHAFIN);</span>
+    }
+
+    public static ExcepcionRegla crearErrorHorasSemana(){
+<span class="nc" id="L35">        return new ExcepcionRegla(MENSAJE_INGRESOINCORRECTO_HORASXSEMANA);</span>
+    }
+
+    public static ExcepcionRegla crearErrorValorHora(String parValorHora){
+<span class="nc" id="L39">        return new ExcepcionRegla(MENSAJE_INGRESOINCORRECTO_VALORHORA + parValorHora);</span>
+    }    
+    
+    public static ExcepcionRegla crearErrorSinPeriodoActivo(){
+<span class="nc" id="L43">        return new ExcepcionRegla(MENSAJE_SINPERIODO_ACTIVO);</span>
+    }     
+    
+    public static ExcepcionRegla crearErrorSinContratosVigentes(){
+<span class="nc" id="L47">        return new ExcepcionRegla(MENSAJE_SINCONTRATOS_VIGENTES);</span>
+    } 
+    public static ExcepcionRegla crearErrorFechaParaProcesarNoValida(){
+<span class="nc" id="L50">        return new ExcepcionRegla(MENSAJE_FECHAACTUAL_NO_VALIDA);</span>
+    }  
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

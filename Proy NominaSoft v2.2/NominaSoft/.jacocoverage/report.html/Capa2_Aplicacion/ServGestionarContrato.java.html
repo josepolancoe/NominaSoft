@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ServGestionarContrato.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;NominaSoft&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">Capa2_Aplicacion</a> &gt; <span class="el_source">ServGestionarContrato.java</span></div><h1>ServGestionarContrato.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Capa2_Aplicacion;
+
+import Capa3_Dominio.Contrato;
+import Capa4_Persistencia.AfpDAOPostgre;
+import Capa4_Persistencia.ConexionDAOPostgre;
+import Capa4_Persistencia.ContratoDAOPostgre;
+import Capa4_Persistencia.EmpleadoDAOPostgre;
+import Capa4_Persistencia.GestorJDBC;
+import Capa5_Excepcion.ExcepcionRegla;
+import Capa5_Excepcion.Mensaje;
+import java.util.List;
+
+/**
+ *
+ * @author JOSEPOLANCO
+ */
+public class ServGestionarContrato {
+   private GestorJDBC gestorJDBC;
+   private ContratoDAOPostgre contratoDAOPostgre;
+   private EmpleadoDAOPostgre empleadoDAOPostgre;
+   private AfpDAOPostgre afpDAOPostgre;
+
+   
+<span class="nc" id="L29">    public ServGestionarContrato(){</span>
+<span class="nc" id="L30">       gestorJDBC = new ConexionDAOPostgre();</span>
+<span class="nc" id="L31">       contratoDAOPostgre = new ContratoDAOPostgre(gestorJDBC);</span>
+<span class="nc" id="L32">       empleadoDAOPostgre = new EmpleadoDAOPostgre(gestorJDBC);</span>
+<span class="nc" id="L33">       afpDAOPostgre = new AfpDAOPostgre(gestorJDBC);       </span>
+<span class="nc" id="L34">   }</span>
+   
+    public int IngresarContrato(Contrato contrato) throws Exception{
+<span class="nc" id="L37">        int registros_afectados = 0;</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">        if(ValidarContrato(contrato)){</span>
+<span class="nc" id="L39">            gestorJDBC.abrirConexion();</span>
+<span class="nc" id="L40">            gestorJDBC.iniciarTransaccion();</span>
+            try {
+<span class="nc" id="L42">                registros_afectados = contratoDAOPostgre.ingresarContrato(contrato);</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">                if(registros_afectados == 1)</span>
+<span class="nc" id="L44">                       gestorJDBC.terminarTransaccion();</span>
+<span class="nc" id="L45">                       return registros_afectados;    </span>
+<span class="nc" id="L46">            } catch (Exception e) {</span>
+<span class="nc" id="L47">                gestorJDBC.cancelarTransaccion();</span>
+<span class="nc" id="L48">                throw e;</span>
+            }
+        }
+<span class="nc" id="L51">        return registros_afectados;</span>
+    } 
+ 
+    public int ModificarContrato(Contrato contrato) throws Exception{
+<span class="nc" id="L55">        int registros_afectados = 0;</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        if(ValidarContrato(contrato)){</span>
+<span class="nc" id="L57">            gestorJDBC.abrirConexion();</span>
+<span class="nc" id="L58">            gestorJDBC.iniciarTransaccion();</span>
+            try {
+<span class="nc" id="L60">                registros_afectados = contratoDAOPostgre.modificarContrato(contrato);   </span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">                if(registros_afectados == 1)</span>
+<span class="nc" id="L62">                    gestorJDBC.terminarTransaccion();</span>
+<span class="nc" id="L63">            } catch (Exception e) {</span>
+<span class="nc" id="L64">                gestorJDBC.cancelarTransaccion();</span>
+<span class="nc" id="L65">                throw e;</span>
+<span class="nc" id="L66">            }    </span>
+        }
+<span class="nc" id="L68">        return registros_afectados;</span>
+    }
+
+    public int AnularContrato(Contrato contrato) throws Exception{
+<span class="nc" id="L72">        gestorJDBC.abrirConexion();</span>
+<span class="nc" id="L73">        gestorJDBC.iniciarTransaccion();</span>
+        try {
+<span class="nc" id="L75">            int registros_afectados = contratoDAOPostgre.anularContrato(contrato);</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">            if(registros_afectados == 1)</span>
+<span class="nc" id="L77">                   gestorJDBC.terminarTransaccion();</span>
+<span class="nc" id="L78">                   return registros_afectados;             </span>
+<span class="nc" id="L79">        } catch (Exception e) {</span>
+<span class="nc" id="L80">            gestorJDBC.cancelarTransaccion();</span>
+<span class="nc" id="L81">            throw e;</span>
+        }
+    }
+    
+    public Contrato VerificarContratoPrevio(int parIdEmpleado){
+<span class="nc" id="L86">        Contrato contratoPrevio = null;</span>
+<span class="nc" id="L87">        List&lt;Contrato&gt;  listaContratos =  null;</span>
+<span class="nc" id="L88">        int codigomayor = 0;</span>
+        try {
+<span class="nc" id="L90">            listaContratos = BuscarContratos(parIdEmpleado); </span>
+            
+<span class="nc bnc" id="L92" title="All 2 branches missed.">            if(!listaContratos.isEmpty()){</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">                for(Contrato objetoContrato : listaContratos){</span>
+<span class="nc" id="L94">                    int codigo = objetoContrato.getIdcontrato();</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">                    if(codigo &gt; codigomayor) codigomayor = codigo;</span>
+<span class="nc" id="L96">                }</span>
+<span class="nc" id="L97">            contratoPrevio = VerificarContrato(codigomayor);</span>
+            }
+<span class="nc" id="L99">        } catch (Exception e) {</span>
+<span class="nc" id="L100">            Mensaje.mostrarAfirmacion(null, Mensaje.OBJETO_NULO);</span>
+<span class="nc" id="L101">        }</span>
+<span class="nc" id="L102">        return contratoPrevio;</span>
+    } 
+    
+    public List&lt;Contrato&gt; BuscarContratos(int idempleado) throws Exception{
+<span class="nc" id="L106">        List&lt;Contrato&gt; listaContratos = null;</span>
+<span class="nc" id="L107">        gestorJDBC.abrirConexion();</span>
+        try {            
+<span class="nc" id="L109">            listaContratos = contratoDAOPostgre.buscarContratos(idempleado);                        </span>
+<span class="nc" id="L110">        } catch (Exception e) {</span>
+<span class="nc" id="L111">            gestorJDBC.cerrarConexion();</span>
+<span class="nc" id="L112">            throw e;</span>
+<span class="nc" id="L113">        }</span>
+<span class="nc" id="L114">        gestorJDBC.cerrarConexion();</span>
+<span class="nc" id="L115">        return listaContratos;</span>
+    }  
+    
+    public Contrato VerificarContrato(int idContrato) throws Exception{
+<span class="nc" id="L119">        Contrato contrato = null;</span>
+<span class="nc" id="L120">        gestorJDBC.abrirConexion();</span>
+        try {            
+<span class="nc" id="L122">            contrato = contratoDAOPostgre.verificarContrato(idContrato);                        </span>
+<span class="nc" id="L123">        } catch (Exception e) {</span>
+<span class="nc" id="L124">            gestorJDBC.cerrarConexion();</span>
+<span class="nc" id="L125">            throw e;</span>
+<span class="nc" id="L126">        }</span>
+<span class="nc" id="L127">        gestorJDBC.cerrarConexion();</span>
+<span class="nc" id="L128">        return contrato;</span>
+    } 
+    
+    public List&lt;Contrato&gt; BuscarContratosActivos() throws Exception{
+<span class="nc" id="L132">        List&lt;Contrato&gt; listaContrato = null;</span>
+<span class="nc" id="L133">        gestorJDBC.abrirConexion();</span>
+        try {            
+<span class="nc" id="L135">            listaContrato = contratoDAOPostgre.buscarContratosActivos();</span>
+<span class="nc" id="L136">        } catch (Exception e) {</span>
+<span class="nc" id="L137">            gestorJDBC.cerrarConexion();</span>
+<span class="nc" id="L138">            throw e;</span>
+<span class="nc" id="L139">        }</span>
+<span class="nc" id="L140">        gestorJDBC.cerrarConexion();</span>
+<span class="nc" id="L141">        return listaContrato;</span>
+    }    
+
+    public Boolean ValidarContrato(Contrato contrato) throws Exception{
+<span class="nc" id="L145">        Contrato contratoPrevio = null;</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">        if(contrato != null) contratoPrevio = VerificarContratoPrevio(contrato.getEmpleado().getIdempleado());</span>
+        try{
+<span class="nc bnc" id="L148" title="All 2 branches missed.">            if(contrato.verificarFechaInicioContratoNuevo(contratoPrevio)== false){ </span>
+<span class="nc" id="L149">                throw ExcepcionRegla.crearErrorFechaInicio();</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">            }else if(contrato.verificarFechaFinContratoNuevo() == false){ </span>
+<span class="nc" id="L151">               throw ExcepcionRegla.crearErrorFechaFin();</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">            }else if(contrato.verificarHorasContratadas()== false){       </span>
+<span class="nc" id="L153">                throw ExcepcionRegla.crearErrorHorasSemana();</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">            }else if(contrato.verificarValorHora() == false){</span>
+<span class="nc" id="L155">                throw ExcepcionRegla.crearErrorValorHora(contrato.getEmpleado().DevolverRangoSueldo());</span>
+            }else{
+<span class="nc" id="L157">                return true;</span>
+            }                                      
+<span class="nc" id="L159">        } catch (ExcepcionRegla er) {</span>
+<span class="nc" id="L160">            Mensaje.mostrarAdvertencia(null, er.getMessage());  </span>
+<span class="nc" id="L161">            return false;</span>
+        } 
+    }    
+    
+    
+}
+    
+    
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

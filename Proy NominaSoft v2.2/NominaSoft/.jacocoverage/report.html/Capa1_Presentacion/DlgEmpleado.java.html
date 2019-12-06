@@ -1,0 +1,570 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DlgEmpleado.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;NominaSoft&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">Capa1_Presentacion</a> &gt; <span class="el_source">DlgEmpleado.java</span></div><h1>DlgEmpleado.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Capa1_Presentacion;
+
+import Capa2_Aplicacion.ServGestionarEmpleado;
+import Capa3_Dominio.Empleado;
+import Capa3_Dominio.EstructuraAbs;
+import Capa5_Excepcion.Mensaje;
+import Capa6_Globales.AtajosTecladoDlg;
+import Capa6_Globales.EstiloEtiqueta;
+import Capa6_Globales.VGlobales;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.KeyEvent;
+import java.util.Date;
+import javax.swing.JOptionPane;
+
+/**
+ *
+ * @author lucab
+ */
+public class DlgEmpleado extends EstructuraAbs {
+
+    /**
+     * Creates new form DlgEmpleado
+     */
+    private transient Empleado empleado, empleadoRecibido;
+    private transient ServGestionarEmpleado gestionarEmpleado;
+    
+    private boolean estado; 
+    private String Nombre, Dni, EstadoCivil, GradoAcademico, Telefono, Direccion, dniRecibido;
+<span class="nc" id="L35">    private int idEmpleado = 0;</span>
+    private java.sql.Date FechaNacimiento;
+   
+    public DlgEmpleado(java.awt.Frame parent, boolean modal) {
+<span class="nc" id="L39">        super(parent, modal);</span>
+<span class="nc" id="L40">        initComponents();</span>
+<span class="nc" id="L41">        this.getContentPane().setBackground(new Color(153,153,153));</span>
+<span class="nc" id="L42">        setLocationRelativeTo(null);</span>
+<span class="nc" id="L43">        setResizable(false); </span>
+<span class="nc" id="L44">        setTitle(&quot;Empleado&quot;);</span>
+<span class="nc" id="L45">        EstadoDefault();</span>
+<span class="nc" id="L46">    }</span>
+    
+    void ObtenerEmpleado(Empleado parEmpleado){    
+<span class="nc" id="L49">            empleadoRecibido = parEmpleado;  </span>
+<span class="nc" id="L50">            EstadoInicio();     </span>
+<span class="nc" id="L51">    }</span>
+    
+    void ObtenerDni(String parDni){    
+<span class="nc" id="L54">            dniRecibido = parDni;</span>
+<span class="nc" id="L55">            EstadoInicio();</span>
+<span class="nc" id="L56">    }</span>
+
+    private void VerificaEmpleadoDni(){
+<span class="nc bnc" id="L59" title="All 4 branches missed.">        if(txtDni.getText().compareTo(&quot;&quot;)!=0 &amp;&amp; txtDni.getText().length() == 8){  </span>
+<span class="nc" id="L60">            VerificarEmpleado(txtDni.getText());</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">            if(empleado != null){</span>
+<span class="nc" id="L62">                ObtenerEmpleado(empleado);</span>
+            }else 
+<span class="nc" id="L64">                ObtenerDni(txtDni.getText());</span>
+        } else
+<span class="nc" id="L66">            Mensaje.mostrarAdvertencia(this, Mensaje.INGRESE_DNI);</span>
+<span class="nc" id="L67">    }</span>
+
+    private void VerificarEmpleado(String parDni){             
+        try{
+<span class="nc" id="L71">            gestionarEmpleado = new ServGestionarEmpleado();</span>
+<span class="nc" id="L72">            empleado = gestionarEmpleado.VerificarEmpleado(parDni);  </span>
+<span class="nc" id="L73">        }catch (Exception e) {   </span>
+<span class="nc" id="L74">            Mensaje.mostrarError(this, Mensaje.ERROR_SERVICIO + &quot;VerificarEmpleado()&quot;);            </span>
+<span class="nc" id="L75">        } </span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">        if (empleado == null){</span>
+<span class="nc" id="L77">            Mensaje.mostrarAfirmacion(this, Mensaje.OBJETO_NULO + &quot;Empleado&quot;);</span>
+        }
+<span class="nc" id="L79">    }               </span>
+
+    private void MostrarDatos(Empleado parEmpleado){
+<span class="nc bnc" id="L82" title="All 2 branches missed.">        if(parEmpleado != null){</span>
+<span class="nc" id="L83">            txtCodigo.setText(String.valueOf(parEmpleado.getIdempleado()));</span>
+<span class="nc" id="L84">            txtNombre.setText(parEmpleado.getNombre());</span>
+<span class="nc" id="L85">            txtDni.setText(parEmpleado.getDni());        </span>
+<span class="nc" id="L86">            jdcNacimiento.setDate(parEmpleado.getFechanacimiento());             </span>
+<span class="nc" id="L87">            String estadoCivil = (parEmpleado.getEstadocivil()); </span>
+<span class="nc" id="L88">            cboEsCivil.setSelectedItem(estadoCivil);</span>
+<span class="nc" id="L89">            String gradoAcademico = (parEmpleado.getGradoacademico());</span>
+<span class="nc" id="L90">            cboGrado.setSelectedItem(gradoAcademico);</span>
+<span class="nc" id="L91">            txtTelefono.setText(parEmpleado.getTelefono());               </span>
+<span class="nc" id="L92">            txtDireccion.setText(parEmpleado.getDireccion());</span>
+        }
+<span class="nc" id="L94">    }</span>
+    
+    private void RegistraActualiza(){
+<span class="nc" id="L97">        ObtenerDatos();</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">        if(estado) {</span>
+            try {                 
+<span class="nc" id="L100">                empleado = new Empleado(Dni, Nombre, FechaNacimiento, GradoAcademico, EstadoCivil, Telefono, Direccion);                    </span>
+<span class="nc" id="L101">                gestionarEmpleado = new ServGestionarEmpleado();</span>
+<span class="nc" id="L102">                int registros_afectados = gestionarEmpleado.IngresarEmpleado(empleado);                    </span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">                if(registros_afectados == 1){</span>
+<span class="nc" id="L104">                    Mensaje.mostrarAfirmacion(this, Mensaje.REGISTRO_CREADO);</span>
+<span class="nc" id="L105">                    VerificaEmpleadoDni();</span>
+<span class="nc" id="L106">                    btnCancelar.setText(&quot;Terminar&quot;);                         </span>
+                }    
+<span class="nc" id="L108">            } catch (Exception e) {</span>
+<span class="nc" id="L109">                Mensaje.mostrarError(this, Mensaje.ERROR_INGRESO);</span>
+<span class="nc" id="L110">            }</span>
+        } else {
+            try {
+<span class="nc" id="L113">                empleado = new Empleado(idEmpleado, Dni, Nombre, FechaNacimiento, GradoAcademico, EstadoCivil, Telefono, Direccion);                                      </span>
+<span class="nc" id="L114">                ServGestionarEmpleado gestionarEmpleado = new ServGestionarEmpleado();                          </span>
+<span class="nc" id="L115">                int registros_afectados = gestionarEmpleado.ModificarEmpleado(empleado);</span>
+
+<span class="nc bnc" id="L117" title="All 2 branches missed.">                if(registros_afectados == 1){</span>
+<span class="nc" id="L118">                    Mensaje.mostrarAfirmacion(this, Mensaje.REGISTRO_ACTUALIZADO);</span>
+<span class="nc" id="L119">                    VerificaEmpleadoDni();</span>
+<span class="nc" id="L120">                    btnCancelar.setText(&quot;Terminar&quot;);   </span>
+                }     
+<span class="nc" id="L122">            } catch (Exception e) {</span>
+<span class="nc" id="L123">                Mensaje.mostrarError(this, Mensaje.ERROR_ACTUALIZACION);</span>
+<span class="nc" id="L124">            }</span>
+        }
+<span class="nc" id="L126">    }</span>
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings(&quot;unchecked&quot;)
+    // &lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot;Generated Code&quot;&gt;//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+<span class="nc" id="L136">        jpnContacto = new javax.swing.JPanel();</span>
+<span class="nc" id="L137">        lblTelefono = new javax.swing.JLabel();</span>
+<span class="nc" id="L138">        txtTelefono = new javax.swing.JTextField();</span>
+<span class="nc" id="L139">        lblDireccion = new javax.swing.JLabel();</span>
+<span class="nc" id="L140">        txtDireccion = new javax.swing.JTextField();</span>
+<span class="nc" id="L141">        jpnIdentidad = new javax.swing.JPanel();</span>
+<span class="nc" id="L142">        lblDni = new javax.swing.JLabel();</span>
+<span class="nc" id="L143">        txtDni = new javax.swing.JTextField();</span>
+<span class="nc" id="L144">        btnVerificaEmpleado = new javax.swing.JButton();</span>
+<span class="nc" id="L145">        jpnDatos = new javax.swing.JPanel();</span>
+<span class="nc" id="L146">        cboEsCivil = new javax.swing.JComboBox&lt;&gt;();</span>
+<span class="nc" id="L147">        lblEstado = new javax.swing.JLabel();</span>
+<span class="nc" id="L148">        lblNacimiento = new javax.swing.JLabel();</span>
+<span class="nc" id="L149">        lblGrado = new javax.swing.JLabel();</span>
+<span class="nc" id="L150">        jdcNacimiento = new com.toedter.calendar.JDateChooser();</span>
+<span class="nc" id="L151">        cboGrado = new javax.swing.JComboBox&lt;&gt;();</span>
+<span class="nc" id="L152">        lblNombre = new javax.swing.JLabel();</span>
+<span class="nc" id="L153">        txtNombre = new javax.swing.JTextField();</span>
+<span class="nc" id="L154">        txtCodigo = new javax.swing.JTextField();</span>
+<span class="nc" id="L155">        lblCodigo = new javax.swing.JLabel();</span>
+<span class="nc" id="L156">        btnRegistrar = new javax.swing.JButton();</span>
+<span class="nc" id="L157">        btnEliminar = new javax.swing.JButton();</span>
+<span class="nc" id="L158">        btnCancelar = new javax.swing.JButton();</span>
+
+<span class="nc" id="L160">        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);</span>
+<span class="nc" id="L161">        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());</span>
+
+<span class="nc" id="L163">        jpnContacto.setBorder(javax.swing.BorderFactory.createTitledBorder(&quot;Contacto&quot;));</span>
+<span class="nc" id="L164">        jpnContacto.setOpaque(false);</span>
+<span class="nc" id="L165">        jpnContacto.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());</span>
+
+<span class="nc" id="L167">        lblTelefono.setText(&quot;Telefono:&quot;);</span>
+<span class="nc" id="L168">        jpnContacto.add(lblTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, 20));</span>
+<span class="nc" id="L169">        jpnContacto.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 30, 340, -1));</span>
+
+<span class="nc" id="L171">        lblDireccion.setText(&quot;Direccion:&quot;);</span>
+<span class="nc" id="L172">        jpnContacto.add(lblDireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, -1, 20));</span>
+<span class="nc" id="L173">        jpnContacto.add(txtDireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 60, 340, -1));</span>
+
+<span class="nc" id="L175">        getContentPane().add(jpnContacto, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 450, 100));</span>
+
+<span class="nc" id="L177">        jpnIdentidad.setBorder(javax.swing.BorderFactory.createTitledBorder(&quot;Identidad&quot;));</span>
+<span class="nc" id="L178">        jpnIdentidad.setOpaque(false);</span>
+<span class="nc" id="L179">        jpnIdentidad.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());</span>
+
+<span class="nc" id="L181">        lblDni.setText(&quot;DNI:&quot;);</span>
+<span class="nc" id="L182">        jpnIdentidad.add(lblDni, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 30, 20));</span>
+
+<span class="nc" id="L184">        txtDni.addKeyListener(new java.awt.event.KeyAdapter() {</span>
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+<span class="nc" id="L186">                txtDniKeyPressed(evt);</span>
+<span class="nc" id="L187">            }</span>
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+<span class="nc" id="L189">                txtDniKeyTyped(evt);</span>
+<span class="nc" id="L190">            }</span>
+        });
+<span class="nc" id="L192">        jpnIdentidad.add(txtDni, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 30, 100, -1));</span>
+
+<span class="nc" id="L194">        btnVerificaEmpleado.setText(&quot;Verificar&quot;);</span>
+<span class="nc" id="L195">        btnVerificaEmpleado.addActionListener(new java.awt.event.ActionListener() {</span>
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L197">                btnVerificaEmpleadoActionPerformed(evt);</span>
+<span class="nc" id="L198">            }</span>
+        });
+<span class="nc" id="L200">        jpnIdentidad.add(btnVerificaEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 30, -1, -1));</span>
+
+<span class="nc" id="L202">        getContentPane().add(jpnIdentidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 340, 80));</span>
+
+<span class="nc" id="L204">        jpnDatos.setBorder(javax.swing.BorderFactory.createTitledBorder(&quot;Datos&quot;));</span>
+<span class="nc" id="L205">        jpnDatos.setOpaque(false);</span>
+<span class="nc" id="L206">        jpnDatos.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());</span>
+
+<span class="nc" id="L208">        cboEsCivil.setModel(new javax.swing.DefaultComboBoxModel&lt;&gt;(new String[] { &quot;&lt;Seleccionar&gt;&quot;, &quot;Casado(a)&quot;, &quot;Soltero(a)&quot;, &quot;Viudo(a)&quot;, &quot;Divorsiado(a)&quot;, &quot;Separados&quot; }));</span>
+<span class="nc" id="L209">        cboEsCivil.setName(&quot;Paciente&quot;); // NOI18N</span>
+<span class="nc" id="L210">        jpnDatos.add(cboEsCivil, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 120, 100, -1));</span>
+
+<span class="nc" id="L212">        lblEstado.setText(&quot;Estado Civil:&quot;);</span>
+<span class="nc" id="L213">        jpnDatos.add(lblEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, -1, 20));</span>
+
+<span class="nc" id="L215">        lblNacimiento.setText(&quot;Fecha de Nacimineto:&quot;);</span>
+<span class="nc" id="L216">        jpnDatos.add(lblNacimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, 20));</span>
+
+<span class="nc" id="L218">        lblGrado.setText(&quot;Grado Academico:&quot;);</span>
+<span class="nc" id="L219">        jpnDatos.add(lblGrado, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, -1, 20));</span>
+<span class="nc" id="L220">        jpnDatos.add(jdcNacimiento, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 90, 260, -1));</span>
+
+<span class="nc" id="L222">        cboGrado.setModel(new javax.swing.DefaultComboBoxModel&lt;&gt;(new String[] { &quot;&lt;Seleccionar&gt;&quot;, &quot;Primaria&quot;, &quot;Secundaria&quot;, &quot;Bachiller&quot;, &quot;Profesional&quot;, &quot;Magister&quot;, &quot;Doctor&quot;, &quot; &quot; }));</span>
+<span class="nc" id="L223">        jpnDatos.add(cboGrado, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 150, 100, -1));</span>
+
+<span class="nc" id="L225">        lblNombre.setText(&quot;Nombre:&quot;);</span>
+<span class="nc" id="L226">        jpnDatos.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, -1, 20));</span>
+
+<span class="nc" id="L228">        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {</span>
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+<span class="nc" id="L230">                txtNombreKeyTyped(evt);</span>
+<span class="nc" id="L231">            }</span>
+        });
+<span class="nc" id="L233">        jpnDatos.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 60, 340, -1));</span>
+<span class="nc" id="L234">        jpnDatos.add(txtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 30, 100, -1));</span>
+
+<span class="nc" id="L236">        lblCodigo.setText(&quot;Codigo:&quot;);</span>
+<span class="nc" id="L237">        jpnDatos.add(lblCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, 20));</span>
+
+<span class="nc" id="L239">        getContentPane().add(jpnDatos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 450, 190));</span>
+
+<span class="nc" id="L241">        btnRegistrar.setText(&quot;Registrar&quot;);</span>
+<span class="nc" id="L242">        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {</span>
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L244">                btnRegistrarActionPerformed(evt);</span>
+<span class="nc" id="L245">            }</span>
+        });
+<span class="nc" id="L247">        getContentPane().add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 10, 90, -1));</span>
+
+<span class="nc" id="L249">        btnEliminar.setText(&quot;Eliminar&quot;);</span>
+<span class="nc" id="L250">        btnEliminar.addActionListener(new java.awt.event.ActionListener() {</span>
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L252">                btnEliminarActionPerformed(evt);</span>
+<span class="nc" id="L253">            }</span>
+        });
+<span class="nc" id="L255">        getContentPane().add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 40, 90, -1));</span>
+
+<span class="nc" id="L257">        btnCancelar.setText(&quot;Cancelar&quot;);</span>
+<span class="nc" id="L258">        btnCancelar.addActionListener(new java.awt.event.ActionListener() {</span>
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L260">                btnCancelarActionPerformed(evt);</span>
+<span class="nc" id="L261">            }</span>
+        });
+<span class="nc" id="L263">        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 70, 90, -1));</span>
+
+<span class="nc" id="L265">        pack();</span>
+<span class="nc" id="L266">    }// &lt;/editor-fold&gt;//GEN-END:initComponents</span>
+
+    private void txtDniKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDniKeyTyped
+        // TODO add your handling code here:
+<span class="nc" id="L270">        String patron_de_entrada = &quot;0123456789&quot;;</span>
+<span class="nc bnc" id="L271" title="All 4 branches missed.">        if (txtDni.getText().length() == 8 || !patron_de_entrada.contains(String.valueOf(evt.getKeyChar()))){</span>
+<span class="nc" id="L272">        evt.consume();</span>
+        }
+<span class="nc" id="L274">    }//GEN-LAST:event_txtDniKeyTyped</span>
+
+    private void btnVerificaEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerificaEmpleadoActionPerformed
+        // TODO add your handling code here:  
+<span class="nc" id="L278">        VerificaEmpleadoDni();</span>
+<span class="nc" id="L279">    }//GEN-LAST:event_btnVerificaEmpleadoActionPerformed</span>
+
+    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
+        // TODO add your handling code here:
+<span class="nc bnc" id="L283" title="All 6 branches missed.">        if(!Character.isLetter(evt.getKeyChar()) &amp;&amp; !(evt.getKeyChar()==KeyEvent.VK_SPACE) &amp;&amp; !(evt.getKeyChar()==KeyEvent.VK_BACK_SPACE)){</span>
+<span class="nc" id="L284">        evt.consume();</span>
+        }
+<span class="nc" id="L286">    }//GEN-LAST:event_txtNombreKeyTyped</span>
+
+    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        // TODO add your handling code here:
+<span class="nc" id="L290">        RegistraActualiza();   </span>
+<span class="nc" id="L291">    }//GEN-LAST:event_btnRegistrarActionPerformed</span>
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+<span class="nc bnc" id="L295" title="All 2 branches missed.">        if(btnCancelar.getText().equalsIgnoreCase(&quot;Terminar&quot;)){</span>
+<span class="nc" id="L296">                int seleccion = JOptionPane.showConfirmDialog(this,&quot;¿Deseas gestionar otro empleado? &quot;,&quot;!Atencion!&quot;,JOptionPane.YES_NO_OPTION );</span>
+<span class="nc bnc" id="L297" title="All 2 branches missed.">                if(seleccion == JOptionPane.YES_OPTION) { </span>
+<span class="nc" id="L298">                    EstadoDefault();</span>
+<span class="nc" id="L299">                    empleadoRecibido = null;</span>
+<span class="nc" id="L300">                    dniRecibido = null;</span>
+<span class="nc" id="L301">                    empleado = null;</span>
+                }else
+<span class="nc" id="L303">                    this.dispose(); </span>
+<span class="nc" id="L304">        }else{</span>
+<span class="nc" id="L305">            this.dispose();   </span>
+        }
+<span class="nc" id="L307">    }//GEN-LAST:event_btnCancelarActionPerformed</span>
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        // TODO add your handling code here:   
+<span class="nc bnc" id="L311" title="All 2 branches missed.">        if(txtDni.getText().compareTo(&quot;&quot;)!=0){    </span>
+<span class="nc" id="L312">            int seleccion = JOptionPane.showConfirmDialog(this,&quot;Deseas Eliminarlo &quot;,&quot;Eliminar Empleado&quot;,JOptionPane.YES_NO_OPTION );</span>
+<span class="nc bnc" id="L313" title="All 2 branches missed.">            if( seleccion == JOptionPane.YES_OPTION ) {   </span>
+                try {                
+<span class="nc" id="L315">                    gestionarEmpleado = new ServGestionarEmpleado();                </span>
+<span class="nc" id="L316">                    int registros_afectados = gestionarEmpleado.EliminarEmpleado(empleado);</span>
+
+<span class="nc bnc" id="L318" title="All 2 branches missed.">                    if(registros_afectados == 1){</span>
+<span class="nc" id="L319">                        Mensaje.mostrarAfirmacion(this, Mensaje.REGISTRO_ELIMINADO);</span>
+<span class="nc" id="L320">                        EstadoDefault();</span>
+                    }
+<span class="nc" id="L322">                } catch (Exception e) {</span>
+<span class="nc" id="L323">                    Mensaje.mostrarError(this, Mensaje.ERROR_ELIMINAR);</span>
+<span class="nc" id="L324">                    Mensaje.mostrarAdvertencia(this, &quot;El empleado se eliminara solo si no tiene ningun contrato activo&quot;);</span>
+<span class="nc" id="L325">                }       </span>
+            }          
+<span class="nc" id="L327">        }else</span>
+<span class="nc" id="L328">            Mensaje.mostrarAdvertencia(this, &quot;Sin datos para eliminar&quot;);</span>
+        
+<span class="nc" id="L330">    }//GEN-LAST:event_btnEliminarActionPerformed</span>
+
+    private void txtDniKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDniKeyPressed
+        // TODO add your handling code here: 
+<span class="nc bnc" id="L334" title="All 2 branches missed.">        if(evt.getKeyCode()==KeyEvent.VK_ENTER){</span>
+<span class="nc" id="L335">            VerificaEmpleadoDni();</span>
+<span class="nc bnc" id="L336" title="All 2 branches missed.">        }else if(evt.getKeyCode()==KeyEvent.VK_ESCAPE){</span>
+<span class="nc" id="L337">            this.dispose();</span>
+        }
+<span class="nc" id="L339">    }//GEN-LAST:event_txtDniKeyPressed</span>
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //&lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot; Look and feel setting code (optional) &quot;&gt;
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+<span class="nc bnc" id="L351" title="All 2 branches missed.">            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {</span>
+<span class="nc bnc" id="L352" title="All 2 branches missed.">                if (&quot;Nimbus&quot;.equals(info.getName())) {</span>
+<span class="nc" id="L353">                    javax.swing.UIManager.setLookAndFeel(info.getClassName());</span>
+<span class="nc" id="L354">                    break;</span>
+                }
+            }
+<span class="nc" id="L357">        } catch (ClassNotFoundException ex) {</span>
+<span class="nc" id="L358">            java.util.logging.Logger.getLogger(DlgEmpleado.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L359">        } catch (InstantiationException ex) {</span>
+<span class="nc" id="L360">            java.util.logging.Logger.getLogger(DlgEmpleado.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L361">        } catch (IllegalAccessException ex) {</span>
+<span class="nc" id="L362">            java.util.logging.Logger.getLogger(DlgEmpleado.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L363">        } catch (javax.swing.UnsupportedLookAndFeelException ex) {</span>
+<span class="nc" id="L364">            java.util.logging.Logger.getLogger(DlgEmpleado.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L365">        }</span>
+        //&lt;/editor-fold&gt;
+
+        /* Create and display the dialog */
+<span class="nc" id="L369">        java.awt.EventQueue.invokeLater(new Runnable() {</span>
+            public void run() {                   
+<span class="nc" id="L371">                DlgEmpleado dialog = new DlgEmpleado(new javax.swing.JFrame(), true);</span>
+<span class="nc" id="L372">                dialog.addWindowListener(new java.awt.event.WindowAdapter() {</span>
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+<span class="nc" id="L375">                        System.exit(0);</span>
+<span class="nc" id="L376">                    }</span>
+                });
+<span class="nc" id="L378">                dialog.setVisible(true);</span>
+<span class="nc" id="L379">            }</span>
+        });
+<span class="nc" id="L381">    }</span>
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnRegistrar;
+    private javax.swing.JButton btnVerificaEmpleado;
+    private javax.swing.JComboBox&lt;String&gt; cboEsCivil;
+    private javax.swing.JComboBox&lt;String&gt; cboGrado;
+    private com.toedter.calendar.JDateChooser jdcNacimiento;
+    private javax.swing.JPanel jpnContacto;
+    private javax.swing.JPanel jpnDatos;
+    private javax.swing.JPanel jpnIdentidad;
+    private javax.swing.JLabel lblCodigo;
+    private javax.swing.JLabel lblDireccion;
+    private javax.swing.JLabel lblDni;
+    private javax.swing.JLabel lblEstado;
+    private javax.swing.JLabel lblGrado;
+    private javax.swing.JLabel lblNacimiento;
+    private javax.swing.JLabel lblNombre;
+    private javax.swing.JLabel lblTelefono;
+    private javax.swing.JTextField txtCodigo;
+    private javax.swing.JTextField txtDireccion;
+    private javax.swing.JTextField txtDni;
+    private javax.swing.JTextField txtNombre;
+    private javax.swing.JTextField txtTelefono;
+    // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void EstadoInicio() {
+<span class="nc" id="L411">        ActivarControles(true);</span>
+<span class="nc" id="L412">        ActivarEntradas(true); </span>
+<span class="nc" id="L413">        EstadoEntradas(true);</span>
+<span class="nc" id="L414">        VisibilidadControles(true);</span>
+<span class="nc bnc" id="L415" title="All 2 branches missed.">        if(empleadoRecibido != null){</span>
+<span class="nc" id="L416">            estado = false;          </span>
+<span class="nc" id="L417">            btnRegistrar.setText(&quot;Actualizar&quot;);</span>
+<span class="nc" id="L418">            btnCancelar.setText(&quot;Cancelar&quot;);  </span>
+<span class="nc" id="L419">            EstadoControles(true);</span>
+<span class="nc" id="L420">            MostrarDatos(empleadoRecibido);</span>
+<span class="nc" id="L421">            setMnemonic();           </span>
+<span class="nc bnc" id="L422" title="All 2 branches missed.">        }else if(dniRecibido != null){</span>
+<span class="nc" id="L423">            estado = true;</span>
+<span class="nc" id="L424">            txtDni.setText(dniRecibido);                   </span>
+<span class="nc" id="L425">            EstadoControles(true);  </span>
+<span class="nc" id="L426">            txtNombre.requestFocus(); </span>
+<span class="nc" id="L427">            setMnemonic();  </span>
+<span class="nc" id="L428">        }    }</span>
+
+    @Override
+    public void Estado(boolean parEstado) {
+//        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;); //To change body of generated methods, choose Tools | Templates.
+<span class="nc" id="L433">    }</span>
+    
+    @Override
+    public void EstadoDefault() {
+<span class="nc" id="L437">        LimpiarEntradas();</span>
+<span class="nc" id="L438">        Estilo();</span>
+<span class="nc" id="L439">        ActivarControles(false);</span>
+<span class="nc" id="L440">        ActivarEntradas(false);</span>
+<span class="nc" id="L441">        EstadoEntradas(false);</span>
+<span class="nc" id="L442">        VisibilidadControles(false);</span>
+<span class="nc" id="L443">        txtDni.requestFocus();</span>
+<span class="nc" id="L444">        btnCancelar.setText(&quot;Cancelar&quot;);</span>
+<span class="nc" id="L445">        btnRegistrar.setText(&quot;Registrar&quot;);</span>
+<span class="nc" id="L446">    }</span>
+
+    @Override
+    public void LimpiarEntradas() {
+<span class="nc" id="L450">        txtCodigo.setText(&quot;&quot;);</span>
+<span class="nc" id="L451">        txtDni.setText(&quot;&quot;);</span>
+<span class="nc" id="L452">        txtNombre.setText(&quot;&quot;);</span>
+<span class="nc" id="L453">        jdcNacimiento.setDate(null);</span>
+<span class="nc" id="L454">        cboEsCivil.setSelectedIndex(0);</span>
+<span class="nc" id="L455">        cboGrado.setSelectedIndex(0);</span>
+<span class="nc" id="L456">        txtTelefono.setText(&quot;&quot;);</span>
+<span class="nc" id="L457">        txtDireccion.setText(&quot;&quot;);</span>
+<span class="nc" id="L458">    }</span>
+
+    @Override
+    public void ActivarControles(boolean sw) {
+<span class="nc bnc" id="L462" title="All 2 branches missed.">        btnVerificaEmpleado.setEnabled(!sw);</span>
+<span class="nc" id="L463">        btnRegistrar.setEnabled(sw);</span>
+<span class="nc" id="L464">        btnEliminar.setEnabled(sw);</span>
+<span class="nc" id="L465">        btnCancelar.setEnabled(sw);</span>
+<span class="nc" id="L466">    }</span>
+
+    @Override
+    public void ActivarEntradas(boolean sw) {
+<span class="nc" id="L470">        txtCodigo.setEnabled(sw);</span>
+<span class="nc" id="L471">        txtNombre.setEnabled(sw);</span>
+<span class="nc" id="L472">        jdcNacimiento.setEnabled(sw);</span>
+<span class="nc" id="L473">        cboEsCivil.setEnabled(sw);</span>
+<span class="nc" id="L474">        cboGrado.setEnabled(sw);       </span>
+<span class="nc" id="L475">        txtTelefono.setEnabled(sw);       </span>
+<span class="nc" id="L476">        txtDireccion.setEnabled(sw);</span>
+<span class="nc" id="L477">    }</span>
+
+    @Override
+    public void EstadoControles(boolean sw) {
+<span class="nc" id="L481">        btnVerificaEmpleado.setEnabled(false);</span>
+<span class="nc" id="L482">        btnRegistrar.setEnabled(true);</span>
+<span class="nc bnc" id="L483" title="All 2 branches missed.">        if(btnRegistrar.getText().equals(&quot;Registrar&quot;)) btnEliminar.setEnabled(false); else btnEliminar.setEnabled(true);</span>
+<span class="nc" id="L484">        btnCancelar.setEnabled(true);</span>
+<span class="nc" id="L485">    }</span>
+
+    @Override
+    public void EstadoEntradas(boolean sw) {
+<span class="nc" id="L489">        txtCodigo.setEditable(false);</span>
+<span class="nc bnc" id="L490" title="All 2 branches missed.">        txtDni.setEditable(!sw);</span>
+<span class="nc" id="L491">        txtNombre.setEditable(sw);</span>
+<span class="nc" id="L492">        cboEsCivil.setEditable(sw);</span>
+<span class="nc" id="L493">        cboGrado.setEditable(sw);</span>
+<span class="nc" id="L494">        txtTelefono.setEditable(sw);</span>
+<span class="nc" id="L495">        txtDireccion.setEditable(sw);</span>
+<span class="nc" id="L496">    }</span>
+
+    @Override
+    public void VisibilidadControles(boolean sw) {
+<span class="nc" id="L500">        this.jpnIdentidad.setVisible(true);</span>
+<span class="nc" id="L501">        this.jpnDatos.setVisible(sw);</span>
+<span class="nc" id="L502">        this.jpnContacto.setVisible(sw);</span>
+<span class="nc bnc" id="L503" title="All 2 branches missed.">        this.btnVerificaEmpleado.setVisible(!sw);</span>
+<span class="nc" id="L504">        this.btnRegistrar.setVisible(sw);</span>
+<span class="nc" id="L505">        this.btnEliminar.setVisible(sw);</span>
+<span class="nc" id="L506">        this.btnCancelar.setVisible(sw); </span>
+<span class="nc" id="L507">    }</span>
+
+    @Override
+    public void ObtenerDatos() {
+<span class="nc bnc" id="L511" title="All 8 branches missed.">        if(txtNombre.getText().compareTo(&quot;&quot;)!=0 &amp;&amp; txtDni.getText().compareTo(&quot;&quot;)!=0 &amp;&amp; txtTelefono.getText().compareTo(&quot;&quot;)!=0  &amp;&amp; txtDireccion.getText().compareTo(&quot;&quot;)!=0)</span>
+            {  
+<span class="nc bnc" id="L513" title="All 2 branches missed.">            if(txtCodigo.getText().length() &gt; 0){</span>
+<span class="nc" id="L514">                idEmpleado = Integer.parseInt(txtCodigo.getText().trim());</span>
+            }
+<span class="nc" id="L516">            Dni = txtDni.getText();</span>
+<span class="nc" id="L517">            Nombre = txtNombre.getText();                  </span>
+<span class="nc" id="L518">            long date = 0;     </span>
+<span class="nc" id="L519">            Date Fecha = jdcNacimiento.getDate();                </span>
+<span class="nc" id="L520">            date = Fecha.getTime(); </span>
+<span class="nc" id="L521">            FechaNacimiento = new java.sql.Date(date); </span>
+<span class="nc" id="L522">            GradoAcademico = String.valueOf(cboGrado.getSelectedItem());</span>
+<span class="nc" id="L523">            EstadoCivil = String.valueOf(cboEsCivil.getSelectedItem());</span>
+<span class="nc" id="L524">            Telefono = txtTelefono.getText();           </span>
+<span class="nc" id="L525">            Direccion = txtDireccion.getText();       </span>
+<span class="nc" id="L526">        } else</span>
+<span class="nc" id="L527">            Mensaje.mostrarAdvertencia(this, Mensaje.DATOS_INCOMPLETOS);</span>
+<span class="nc" id="L528">    }</span>
+
+    @Override
+    public void setMnemonic() {
+<span class="nc" id="L532">        btnEliminar.setMnemonic(KeyEvent.VK_E);</span>
+<span class="nc bnc" id="L533" title="All 2 branches missed.">        if(estado == true){</span>
+<span class="nc" id="L534">            btnRegistrar.setMnemonic(KeyEvent.VK_R);</span>
+<span class="nc" id="L535">            btnCancelar.setMnemonic(KeyEvent.VK_C);</span>
+        }else{
+<span class="nc" id="L537">            btnRegistrar.setMnemonic(KeyEvent.VK_A);</span>
+<span class="nc" id="L538">            btnCancelar.setMnemonic(KeyEvent.VK_T);    </span>
+        }
+<span class="nc" id="L540">    }</span>
+
+    @Override
+    public void Estilo() {
+<span class="nc" id="L544">        Object[ ] etiquetas = {lblDni, lblCodigo, lblNombre, lblNacimiento, lblEstado, lblGrado, lblTelefono,</span>
+            lblDireccion};
+<span class="nc" id="L546">        EstiloEtiqueta estilo = new EstiloEtiqueta(etiquetas);</span>
+
+<span class="nc" id="L548">        jpnIdentidad.setFont(VGlobales.estiloFuente);    </span>
+<span class="nc" id="L549">        jpnDatos.setFont(VGlobales.estiloFuente);</span>
+<span class="nc" id="L550">        jpnContacto.setFont(VGlobales.estiloFuente);</span>
+<span class="nc" id="L551">    }</span>
+
+    @Override
+    public void EventoTecla() {
+<span class="nc" id="L555">        txtDni.addKeyListener(new AtajosTecladoDlg(this));</span>
+<span class="nc" id="L556">        txtCodigo.addKeyListener(new AtajosTecladoDlg(this));</span>
+<span class="nc" id="L557">        txtNombre.addKeyListener(new AtajosTecladoDlg(this));</span>
+<span class="nc" id="L558">        jdcNacimiento.addKeyListener(new AtajosTecladoDlg(this));</span>
+<span class="nc" id="L559">        cboEsCivil.addKeyListener(new AtajosTecladoDlg(this));</span>
+<span class="nc" id="L560">        cboGrado.addKeyListener(new AtajosTecladoDlg(this));</span>
+<span class="nc" id="L561">        txtDireccion.addKeyListener(new AtajosTecladoDlg(this));</span>
+<span class="nc" id="L562">        txtTelefono.addKeyListener(new AtajosTecladoDlg(this));</span>
+<span class="nc" id="L563">        btnVerificaEmpleado.addKeyListener(new AtajosTecladoDlg(this));</span>
+<span class="nc" id="L564">        btnRegistrar.addKeyListener(new AtajosTecladoDlg(this));</span>
+<span class="nc" id="L565">        btnEliminar.addKeyListener(new AtajosTecladoDlg(this));</span>
+<span class="nc" id="L566">        btnCancelar.addKeyListener(new AtajosTecladoDlg(this));</span>
+<span class="nc" id="L567">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

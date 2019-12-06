@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ContratoDAOPostgre.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;NominaSoft&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">Capa4_Persistencia</a> &gt; <span class="el_source">ContratoDAOPostgre.java</span></div><h1>ContratoDAOPostgre.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Capa4_Persistencia;
+
+import Capa3_Dominio.Contrato;
+import Capa3_Dominio.Empleado;
+import Capa3_Dominio.Afp;
+import Capa5_Excepcion.ExcepcionSQL;
+import java.util.List;
+import java.util.ArrayList;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+
+/**
+ *
+ * @author JOSEPOLANCO
+ */
+public class ContratoDAOPostgre {
+        
+    GestorJDBC gestorJDBC;
+
+<span class="nc" id="L27">    public ContratoDAOPostgre(GestorJDBC gestorJDBC) {</span>
+<span class="nc" id="L28">        this.gestorJDBC = gestorJDBC;</span>
+<span class="nc" id="L29">    }</span>
+       
+    private void asignarParametros(PreparedStatement sentencia, Contrato contrato) throws SQLException {
+<span class="nc" id="L32">        sentencia.setInt(1, contrato.getEmpleado().getIdempleado());</span>
+<span class="nc" id="L33">        sentencia.setInt(2, contrato.getAfp().getIdafp());</span>
+<span class="nc" id="L34">        sentencia.setDate(3, contrato.getFechainiciocontrato());</span>
+<span class="nc" id="L35">        sentencia.setDate(4, contrato.getFechafincontrato());</span>
+<span class="nc" id="L36">        sentencia.setString(5, contrato.getCargo());</span>
+<span class="nc" id="L37">        sentencia.setBoolean(6, contrato.getAsignacionfamiliar());</span>
+<span class="nc" id="L38">        sentencia.setInt(7, contrato.getTotalhoras  ());</span>
+<span class="nc" id="L39">        sentencia.setDouble(8, contrato.getValorhora());</span>
+<span class="nc" id="L40">        }</span>
+     
+    private Contrato crearObjContrato(ResultSet resultado) throws SQLException {  
+<span class="nc" id="L43">        Empleado empleado = new Empleado();</span>
+<span class="nc" id="L44">        Afp afp = new Afp();       </span>
+<span class="nc" id="L45">        empleado.setIdempleado(resultado.getInt(&quot;idempleado&quot;));</span>
+<span class="nc" id="L46">        afp.setIdafp(resultado.getInt(&quot;idafp&quot;));</span>
+        
+<span class="nc" id="L48">        return new Contrato(resultado.getInt(&quot;idcontrato&quot;),</span>
+                            empleado,
+                            afp,
+<span class="nc" id="L51">                            resultado.getDate(&quot;fechainiciocontrato&quot;), </span>
+<span class="nc" id="L52">                            resultado.getDate(&quot;fechafincontrato&quot;), </span>
+<span class="nc" id="L53">                            resultado.getString(&quot;cargo&quot;),</span>
+<span class="nc" id="L54">                            resultado.getBoolean(&quot;asignacionfamiliar&quot;), </span>
+<span class="nc" id="L55">                            resultado.getInt(&quot;totalhoras&quot;), </span>
+<span class="nc" id="L56">                            resultado.getDouble(&quot;valorhora&quot;),</span>
+<span class="nc" id="L57">                            resultado.getString(&quot;condicion&quot;));</span>
+    }
+    
+    public int ingresarContrato(Contrato contrato)throws Exception{
+        int registros_afectados;
+<span class="nc" id="L62">        String sentenciaSQL = &quot;insert into contrato(idempleado, idafp, fechainiciocontrato, fechafincontrato, cargo, asignacionfamiliar, totalhoras, valorhora) &quot;</span>
+                + &quot;values(?,?,?,?,?,?,?,?)&quot;;
+        try{
+<span class="nc" id="L65">            PreparedStatement sentencia = gestorJDBC.prepararSentencia(sentenciaSQL);</span>
+<span class="nc" id="L66">            asignarParametros(sentencia, contrato);</span>
+<span class="nc" id="L67">            registros_afectados = sentencia.executeUpdate();</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">            if(registros_afectados == 0){</span>
+<span class="nc" id="L69">                throw ExcepcionSQL.crearErrorInsertar();   </span>
+             }
+<span class="nc" id="L71">             return registros_afectados;</span>
+        }
+<span class="nc" id="L73">        catch(Exception e){</span>
+<span class="nc" id="L74">            throw ExcepcionSQL.crearErrorInsertar();</span>
+        }
+    }
+    
+    public int modificarContrato(Contrato contrato) throws Exception {
+        int registros_afectados;
+<span class="nc" id="L80">        String sentenciaSQL = &quot;update contrato set idempleado = ?, idafp = ?, fechainiciocontrato = ?, fechafincontrato = ?, cargo = ?, asignacionfamiliar = ?, totalhoras = ?, valorhora = ?&quot;</span>
+                + &quot; where idcontrato = ?&quot;;
+        try {
+<span class="nc" id="L83">            PreparedStatement sentencia = gestorJDBC.prepararSentencia(sentenciaSQL);</span>
+<span class="nc" id="L84">            asignarParametros(sentencia, contrato);</span>
+<span class="nc" id="L85">            sentencia.setInt(9, contrato.getIdcontrato());</span>
+<span class="nc" id="L86">            registros_afectados = sentencia.executeUpdate();</span>
+<span class="nc" id="L87">            sentencia.close();</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">            if(registros_afectados == 0){</span>
+<span class="nc" id="L89">                throw ExcepcionSQL.crearErrorModificar();</span>
+            }
+<span class="nc" id="L91">        return registros_afectados;</span>
+<span class="nc" id="L92">        } catch (Exception e) {</span>
+<span class="nc" id="L93">            throw ExcepcionSQL.crearErrorModificar();</span>
+        }        
+    }
+
+    public List&lt;Contrato&gt; buscarContratos(int idempleado)throws Exception{
+<span class="nc" id="L98">        ArrayList&lt;Contrato&gt; listaContratos = new ArrayList();</span>
+        ResultSet resultado;
+        Contrato contrato;
+        
+<span class="nc" id="L102">        String sentenciaSQL =&quot;Select idcontrato, idempleado, idafp, fechainiciocontrato, fechafincontrato, cargo, asignacionfamiliar, totalhoras, valorhora, condicion &quot;</span>
+                             + &quot; from contrato where idempleado = '&quot; + idempleado + &quot;'&quot;;       
+  
+        try{
+<span class="nc" id="L106">            resultado = gestorJDBC.ejecutarConsulta(sentenciaSQL);    </span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">            while(resultado.next()){ </span>
+<span class="nc" id="L108">                contrato = crearObjContrato(resultado); </span>
+<span class="nc" id="L109">                listaContratos.add(contrato);</span>
+           }          
+<span class="nc" id="L111">            resultado.close();</span>
+<span class="nc" id="L112">            return listaContratos;    </span>
+<span class="nc" id="L113">        }catch (Exception e) {</span>
+<span class="nc" id="L114">            throw ExcepcionSQL.crearErrorConsultar();</span>
+        }
+    }
+        
+        public Contrato verificarContrato(int idContrato) throws Exception {
+<span class="nc" id="L119">        Contrato contrato = null;</span>
+        ResultSet resultado;
+<span class="nc" id="L121">        String sentenciaSQL = &quot;Select idcontrato, idempleado, idafp, fechainiciocontrato, fechafincontrato, cargo, asignacionfamiliar, totalhoras, valorhora, condicion &quot;</span>
+                             + &quot; from contrato where idcontrato = '&quot; + idContrato + &quot;'&quot;;       
+        try {
+<span class="nc" id="L124">            resultado = gestorJDBC.ejecutarConsulta(sentenciaSQL);            </span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">            if(resultado.next()){</span>
+<span class="nc" id="L126">            contrato = crearObjContrato(resultado); </span>
+            }
+<span class="nc" id="L128">            resultado.close();</span>
+<span class="nc" id="L129">            return contrato;    </span>
+<span class="nc" id="L130">        } catch (Exception e) {</span>
+<span class="nc" id="L131">            throw ExcepcionSQL.crearErrorConsultar();</span>
+        }        
+    } 
+    
+    public int anularContrato(Contrato contrato) throws Exception {
+        int registros_afectados;
+<span class="nc" id="L137">        String sentenciaSQL = &quot;update contrato set condicion = 'ANULADO' &quot;</span>
+                + &quot;where idcontrato = ?&quot;;
+        //, fechafincontrato =  CURRENT_DATE 
+        try {
+<span class="nc" id="L141">            PreparedStatement sentencia = gestorJDBC.prepararSentencia(sentenciaSQL);</span>
+<span class="nc" id="L142">            sentencia.setInt(1, contrato.getIdcontrato());</span>
+<span class="nc" id="L143">            registros_afectados = sentencia.executeUpdate();</span>
+<span class="nc" id="L144">            sentencia.close();</span>
+<span class="nc bnc" id="L145" title="All 2 branches missed.">            if(registros_afectados == 0){</span>
+<span class="nc" id="L146">                throw ExcepcionSQL.crearErrorAnular();</span>
+            }
+<span class="nc" id="L148">            return registros_afectados;</span>
+<span class="nc" id="L149">        } catch (Exception e) {</span>
+<span class="nc" id="L150">            throw ExcepcionSQL.crearErrorAnular();</span>
+        }        
+    } 
+    
+    public List&lt;Contrato&gt; buscarContratosActivos()throws Exception{
+<span class="nc" id="L155">        ArrayList&lt;Contrato&gt; listaContrato = new ArrayList();</span>
+        ResultSet resultado;
+        Contrato contrato;
+        
+<span class="nc" id="L159">        String sentenciaSQL = &quot; select c.idcontrato, e.idempleado, e.nombre, e.dni,&quot;</span>
+                            + &quot; c.idafp, c.fechainiciocontrato, c.fechafincontrato, c.cargo,&quot;
+                            + &quot; c.asignacionfamiliar, c.totalhoras, c.valorhora, c.condicion&quot;
+                            + &quot; from contrato as c&quot;   
+                            + &quot; inner join empleado as e&quot;
+                            + &quot; on e.idempleado=c.idempleado&quot;
+                            + &quot; where c.condicion='ACTIVO'&quot; 
+                            + &quot; order by e.idempleado asc&quot;;
+  
+        try{
+<span class="nc" id="L169">            resultado = gestorJDBC.ejecutarConsulta(sentenciaSQL);    </span>
+<span class="nc bnc" id="L170" title="All 2 branches missed.">            while(resultado.next()){ </span>
+<span class="nc" id="L171">                contrato = crearObjContrato(resultado);</span>
+<span class="nc" id="L172">                listaContrato.add(contrato);</span>
+           }          
+<span class="nc" id="L174">            resultado.close();</span>
+<span class="nc" id="L175">            return listaContrato;    </span>
+<span class="nc" id="L176">        }catch (Exception e) {</span>
+<span class="nc" id="L177">            throw ExcepcionSQL.crearErrorConsultar();</span>
+        }
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

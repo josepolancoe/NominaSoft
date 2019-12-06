@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Mensaje.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;NominaSoft&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">Capa5_Excepcion</a> &gt; <span class="el_source">Mensaje.java</span></div><h1>Mensaje.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Capa5_Excepcion;
+
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+/**
+ *
+ * @author lucab
+ */
+<span class="nc" id="L16">public class Mensaje {</span>
+    
+    public static final String MENSAJE_SIN_ACCESO = &quot;Usuario y/o contraseña incorrectos.&quot;;
+
+    public static final String INGRESE_DNI = &quot;Ingrese DNI.&quot;;    
+    
+    public static final String REGISTRO_NO_EXISTE = &quot;El registro no existe.&quot;;
+    public static final String LISTA_VACIA = &quot;La lista no contiene &quot;;
+    public static final String OBJETO_NULO = &quot;No existe registro &quot;;   
+    
+    public static final String DATOS_INCORRECTOS = &quot;Existen datos incorrectos, verifique.&quot;;
+    public static final String DATOS_INCOMPLETOS = &quot;Ingrese o selecciones los datos que faltan.&quot;;
+    public static final String DATOS_PROCESADOS = &quot;Se procesaron los pagos de todos los empleados.&quot;; 
+    public static final String DATOS_NO_PROCESADOS = &quot;No se procesaron los Datos.&quot;; 
+    public static final String ELEMENTO_NO_SELECCIONADO = &quot;Seleccione un elemento de la lista o tabla.&quot;;    
+    
+    public static final String REGISTRO_ELIMINADO = &quot;El registro fue eliminado.&quot;;
+    public static final String REGISTRO_CREADO = &quot;El registro fue creado.&quot;;
+    public static final String REGISTRO_ACTUALIZADO = &quot;El registro fue modificado.&quot;;
+    public static final String REGISTRO_ANULADO = &quot;El contrato fue anulado.&quot;;
+
+    public static final String ERROR_INGRESO = &quot;Error de Ingreso, no se completo el registro.&quot;;
+    public static final String ERROR_ACTUALIZACION = &quot;Error de Actualizacion, no se completo el registro.&quot;;
+    public static final String ERROR_ELIMINAR = &quot;Error de Eliminar, no se elimino el registro.&quot;;
+    public static final String ERROR_ANULAR = &quot;Error de Anular, no se anulo el contrato.&quot;;
+    public static final String ERROR_SERVICIO = &quot;Error de Servicio, el servicio no obtuvo respuesta.&quot;;
+
+    
+    public static void mostrarAfirmacion(JDialog dialogo, String mensaje){
+<span class="nc" id="L45">        JOptionPane.showMessageDialog(dialogo,mensaje,&quot;Warning : Mensaje&quot;,JOptionPane.INFORMATION_MESSAGE);</span>
+<span class="nc" id="L46">    }</span>
+    
+//    public static void mostrarAfirmacion(JFrame frame, String mensaje){
+//        JOptionPane.showMessageDialog(frame,mensaje,&quot;Warning : Mensaje&quot;,JOptionPane.INFORMATION_MESSAGE);
+//    }
+
+    public static void mostrarAdvertencia(JDialog dialogo, String mensaje){
+<span class="nc" id="L53">        JOptionPane.showMessageDialog(dialogo,mensaje,&quot;Warning : Advertencia&quot;,JOptionPane.WARNING_MESSAGE);</span>
+<span class="nc" id="L54">    }</span>
+    
+//    public static void mostrarAdvertencia(JFrame frame, String mensaje){
+//        JOptionPane.showMessageDialog(frame,mensaje,&quot;Warning : Advertencia&quot;,JOptionPane.WARNING_MESSAGE);
+//    }
+    
+    public static void mostrarError(JDialog dialogo, String mensaje){
+<span class="nc" id="L61">        JOptionPane.showMessageDialog(dialogo,mensaje,&quot;Warning : Error&quot;,JOptionPane.ERROR_MESSAGE);</span>
+<span class="nc" id="L62">    }</span>
+
+//    public static void mostrarError(JFrame frame, String mensaje){
+//        JOptionPane.showMessageDialog(frame,mensaje,&quot;Warning : Error&quot;,JOptionPane.ERROR_MESSAGE);
+//    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

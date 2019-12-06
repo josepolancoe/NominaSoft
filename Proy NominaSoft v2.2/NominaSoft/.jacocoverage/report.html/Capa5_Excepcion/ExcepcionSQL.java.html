@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ExcepcionSQL.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;NominaSoft&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">Capa5_Excepcion</a> &gt; <span class="el_source">ExcepcionSQL.java</span></div><h1>ExcepcionSQL.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Capa5_Excepcion;
+
+/**
+ *
+ * @author lucab
+ */
+public class ExcepcionSQL extends Exception{
+    
+    private static final String MENSAJE_MULTIPLE = &quot;Intente de nuevo o consulte con el Administrador.&quot;;
+    
+    private static final String MENSAJE_ERROR_CONSULTAR = &quot;No se pudo realizar la consulta.\n&quot;
+            + MENSAJE_MULTIPLE;
+    private static final String MENSAJE_ERROR_INSERTAR = &quot;No se pudo guardar los datos.\n&quot;
+            + &quot;Verifique los datos obligatorios y únicos.\n&quot;
+            + MENSAJE_MULTIPLE;
+    private static final String MENSAJE_ERROR_MODIFICAR = &quot;No se pudo actualizar los datos.\n&quot;
+            + &quot;Verifique los datos obligatorios y únicos.\n&quot;
+            + MENSAJE_MULTIPLE;
+    private static final String MENSAJE_ERROR_ELIMINAR = &quot;No se pudo eliminar el registro.\n&quot;
+            + MENSAJE_MULTIPLE;
+    private static final String MENSAJE_ERROR_ANULAR = &quot;No se pudo anular el registro.\n&quot;
+            + MENSAJE_MULTIPLE;
+    private static final String MENSAJE_ERROR_ABRIRCONEXION = &quot;No se pudo abrir la conexión con la base de datos.\n&quot;
+            + MENSAJE_MULTIPLE;
+    private static final String MENSAJE_ERROR_CERRARCONEXION = &quot;No se pudo cerrar la conexión con la base de datos.\n&quot;
+            + MENSAJE_MULTIPLE;
+    private static final String MENSAJE_ERROR_INICIARTRANSACCION = &quot;No se pudo iniciar la transacción.\n&quot;
+            + MENSAJE_MULTIPLE;
+    private static final String MENSAJE_ERROR_TERMINARTRANSACCION = &quot;No se pudo terminar la transacción.\n&quot;
+            + MENSAJE_MULTIPLE;
+    private static final String MENSAJE_ERROR_CANCELARTRANSACCION = &quot;No se pudo cancelar la transacción.\n&quot;
+            + MENSAJE_MULTIPLE;
+
+    private ExcepcionSQL(String message) {
+<span class="nc" id="L40">        super(message);</span>
+<span class="nc" id="L41">    }</span>
+    
+    public static ExcepcionSQL crearErrorConsultar(){
+<span class="nc" id="L44">        return new ExcepcionSQL(MENSAJE_ERROR_CONSULTAR);</span>
+    }
+    
+    public static ExcepcionSQL crearErrorInsertar(){
+<span class="nc" id="L48">        return new ExcepcionSQL(MENSAJE_ERROR_INSERTAR);</span>
+    }
+    
+    public static ExcepcionSQL crearErrorModificar(){
+<span class="nc" id="L52">        return new ExcepcionSQL(MENSAJE_ERROR_MODIFICAR);</span>
+    }
+    
+    public static ExcepcionSQL crearErrorEliminar(){
+<span class="nc" id="L56">        return new ExcepcionSQL(MENSAJE_ERROR_ELIMINAR);</span>
+    }
+    
+    public static ExcepcionSQL crearErrorAnular(){
+<span class="nc" id="L60">        return new ExcepcionSQL(MENSAJE_ERROR_ANULAR);</span>
+    }
+    
+    public static ExcepcionSQL crearErrorAbrirConexion(){
+<span class="nc" id="L64">        return new ExcepcionSQL(MENSAJE_ERROR_ABRIRCONEXION);</span>
+    }
+    
+    public static ExcepcionSQL crearErrorCerrarConexion(){
+<span class="nc" id="L68">        return new ExcepcionSQL(MENSAJE_ERROR_CERRARCONEXION);</span>
+    }
+    
+    public static ExcepcionSQL crearErrorIniciarTransaccion(){
+<span class="nc" id="L72">        return new ExcepcionSQL(MENSAJE_ERROR_INICIARTRANSACCION);</span>
+    }
+    
+    public static ExcepcionSQL crearErrorTerminarTransaccion(){
+<span class="nc" id="L76">        return new ExcepcionSQL(MENSAJE_ERROR_TERMINARTRANSACCION);</span>
+    }
+    
+    public static ExcepcionSQL crearErrorCancelarTransaccion(){
+<span class="nc" id="L80">        return new ExcepcionSQL(MENSAJE_ERROR_CANCELARTRANSACCION);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

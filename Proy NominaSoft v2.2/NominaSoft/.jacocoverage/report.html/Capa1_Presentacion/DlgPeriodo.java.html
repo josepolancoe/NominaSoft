@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DlgPeriodo.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;NominaSoft&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">Capa1_Presentacion</a> &gt; <span class="el_source">DlgPeriodo.java</span></div><h1>DlgPeriodo.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Capa1_Presentacion;
+
+
+import Capa2_Aplicacion.ServGestionarPeriodo;
+import Capa3_Dominio.EstructuraAbs;
+import Capa3_Dominio.Periodo;
+import Capa5_Excepcion.Mensaje;
+import Capa6_Globales.AtajosTecladoDlg;
+import Capa6_Globales.EstiloEtiqueta;
+import Capa6_Globales.VGlobales;
+import com.toedter.calendar.JTextFieldDateEditor;
+import java.awt.Color;
+import java.util.Date;
+import java.util.List;
+
+/**
+ *
+ * @author Jgarc
+ */
+public class DlgPeriodo extends EstructuraAbs {
+
+    /**
+     * Creates new form DlgPeriodo
+     */
+    private transient List&lt;Periodo&gt; listaPeriodo;
+    private transient Periodo periodo, periodoVigente;
+    private transient ServGestionarPeriodo gestionarPeriodo;
+
+    private int idPeriodo;
+<span class="nc" id="L35">    private String estadoPeriodo = &quot;&quot;;</span>
+    private java.sql.Date fechainicioperiodo;
+    private java.sql.Date fechafinperiodo;
+    private boolean estado;
+    
+    public DlgPeriodo(java.awt.Frame parent, boolean modal) {
+<span class="nc" id="L41">        super(parent, modal);</span>
+<span class="nc" id="L42">        initComponents();</span>
+<span class="nc" id="L43">        this.getContentPane().setBackground(new Color(153,153,153));</span>
+<span class="nc" id="L44">        setLocationRelativeTo(null);</span>
+<span class="nc" id="L45">        setResizable(false);</span>
+<span class="nc" id="L46">        setTitle(&quot;Periodo&quot;);</span>
+<span class="nc" id="L47">        EstadoDefault();</span>
+<span class="nc" id="L48">        EstadoInicio();</span>
+<span class="nc" id="L49">    }</span>
+  
+   public void DevolverPeriodo(int parIdPeriodo){             
+        try{
+<span class="nc" id="L53">            gestionarPeriodo = new ServGestionarPeriodo();</span>
+<span class="nc" id="L54">            periodo = gestionarPeriodo.DevolverPeriodo(parIdPeriodo);  </span>
+<span class="nc" id="L55">        }catch (Exception e) {   </span>
+<span class="nc" id="L56">            Mensaje.mostrarError(this, Mensaje.ERROR_SERVICIO + &quot;VerificarPeriodo()&quot;);            </span>
+<span class="nc" id="L57">        } </span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">        if (periodo == null){</span>
+<span class="nc" id="L59">            Mensaje.mostrarAfirmacion(this, Mensaje.OBJETO_NULO + &quot;Periodo&quot;);</span>
+        }
+<span class="nc" id="L61">    }</span>
+    
+    public void ConsultarPeriodos(){     
+        try{
+<span class="nc" id="L65">            gestionarPeriodo = new ServGestionarPeriodo();</span>
+<span class="nc" id="L66">            listaPeriodo = gestionarPeriodo.BuscarPeriodos();     </span>
+<span class="nc" id="L67">        }catch (Exception e) {   </span>
+<span class="nc" id="L68">            Mensaje.mostrarError(this, Mensaje.ERROR_SERVICIO + &quot;ConsultarPeriodos()&quot;);            </span>
+<span class="nc" id="L69">        }</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">        if (listaPeriodo.isEmpty()){</span>
+<span class="nc" id="L71">            Mensaje.mostrarAfirmacion(this, Mensaje.LISTA_VACIA + &quot;Periodos&quot;);</span>
+        }
+<span class="nc" id="L73">    } </span>
+   
+    public void BuscarPeriodoVigente(){
+<span class="nc" id="L76">        ConsultarPeriodos();</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">        if(listaPeriodo != null){</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">            for(Periodo objetoPeriodo : listaPeriodo){</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">                if(objetoPeriodo.verificarPeriodoVigente()){</span>
+<span class="nc" id="L80">                    MostrarDatos(objetoPeriodo);</span>
+<span class="nc" id="L81">                    periodoVigente = objetoPeriodo;</span>
+<span class="nc" id="L82">                    Estado(false);</span>
+<span class="nc" id="L83">                    break;</span>
+                }
+<span class="nc" id="L85">            }</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">            if(periodoVigente == null){</span>
+<span class="nc" id="L87">                EstadoDefault();</span>
+<span class="nc" id="L88">                btnNuevo.setEnabled(true);                </span>
+            }
+        }
+<span class="nc" id="L91">    }</span>
+  
+    public void MostrarDatos(Periodo parPeriodo){  
+<span class="nc bnc" id="L94" title="All 2 branches missed.">        if(parPeriodo != null){</span>
+<span class="nc" id="L95">            txtCodigo.setText(String.valueOf(parPeriodo.getIdperiodo()));     </span>
+<span class="nc" id="L96">            txtEstado.setText(parPeriodo.getEstado());</span>
+<span class="nc" id="L97">            jdcFechaInicioPeriodo.setDate(parPeriodo.getFechainicioperiodo()); </span>
+<span class="nc" id="L98">            jdcFechaFinPeriodo.setDate(parPeriodo.getFechafinperiodo());</span>
+        }  
+<span class="nc" id="L100">    } </span>
+
+    @SuppressWarnings(&quot;unchecked&quot;)
+    // &lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot;Generated Code&quot;&gt;//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+<span class="nc" id="L106">        jpnDatosPeriodo = new javax.swing.JPanel();</span>
+<span class="nc" id="L107">        lblCodigo = new javax.swing.JLabel();</span>
+<span class="nc" id="L108">        txtCodigo = new javax.swing.JTextField();</span>
+<span class="nc" id="L109">        lblEstado = new javax.swing.JLabel();</span>
+<span class="nc" id="L110">        lblInicioPeriodo = new javax.swing.JLabel();</span>
+<span class="nc" id="L111">        jdcFechaFinPeriodo = new com.toedter.calendar.JDateChooser();</span>
+<span class="nc" id="L112">        lblFinPeriodo = new javax.swing.JLabel();</span>
+<span class="nc" id="L113">        jdcFechaInicioPeriodo = new com.toedter.calendar.JDateChooser();</span>
+<span class="nc" id="L114">        txtEstado = new javax.swing.JTextField();</span>
+<span class="nc" id="L115">        btnNuevo = new javax.swing.JButton();</span>
+<span class="nc" id="L116">        btnRegistrar = new javax.swing.JButton();</span>
+<span class="nc" id="L117">        btnModificar = new javax.swing.JButton();</span>
+<span class="nc" id="L118">        btnCancelar = new javax.swing.JButton();</span>
+
+<span class="nc" id="L120">        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);</span>
+<span class="nc" id="L121">        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());</span>
+
+<span class="nc" id="L123">        jpnDatosPeriodo.setBorder(javax.swing.BorderFactory.createTitledBorder(&quot;Datos&quot;));</span>
+<span class="nc" id="L124">        jpnDatosPeriodo.setOpaque(false);</span>
+<span class="nc" id="L125">        jpnDatosPeriodo.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());</span>
+
+<span class="nc" id="L127">        lblCodigo.setText(&quot;Codigo:&quot;);</span>
+<span class="nc" id="L128">        jpnDatosPeriodo.add(lblCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, 20));</span>
+<span class="nc" id="L129">        jpnDatosPeriodo.add(txtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 30, 119, -1));</span>
+
+<span class="nc" id="L131">        lblEstado.setText(&quot;Estado:&quot;);</span>
+<span class="nc" id="L132">        jpnDatosPeriodo.add(lblEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, -1, 20));</span>
+
+<span class="nc" id="L134">        lblInicioPeriodo.setText(&quot;Inicio del Periodo:&quot;);</span>
+<span class="nc" id="L135">        jpnDatosPeriodo.add(lblInicioPeriodo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, 20));</span>
+
+<span class="nc" id="L137">        jdcFechaFinPeriodo.addPropertyChangeListener(new java.beans.PropertyChangeListener() {</span>
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+<span class="nc" id="L139">                jdcFechaFinPeriodoPropertyChange(evt);</span>
+<span class="nc" id="L140">            }</span>
+        });
+<span class="nc" id="L142">        jpnDatosPeriodo.add(jdcFechaFinPeriodo, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 100, 160, -1));</span>
+
+<span class="nc" id="L144">        lblFinPeriodo.setText(&quot;Fin del Periodo:&quot;);</span>
+<span class="nc" id="L145">        jpnDatosPeriodo.add(lblFinPeriodo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, -1, 20));</span>
+
+<span class="nc" id="L147">        jdcFechaInicioPeriodo.addPropertyChangeListener(new java.beans.PropertyChangeListener() {</span>
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+<span class="nc" id="L149">                jdcFechaInicioPeriodoPropertyChange(evt);</span>
+<span class="nc" id="L150">            }</span>
+        });
+<span class="nc" id="L152">        jpnDatosPeriodo.add(jdcFechaInicioPeriodo, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 70, 160, -1));</span>
+<span class="nc" id="L153">        jpnDatosPeriodo.add(txtEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 140, 160, -1));</span>
+
+<span class="nc" id="L155">        btnNuevo.setText(&quot;Nuevo&quot;);</span>
+<span class="nc" id="L156">        btnNuevo.addActionListener(new java.awt.event.ActionListener() {</span>
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L158">                btnNuevoActionPerformed(evt);</span>
+<span class="nc" id="L159">            }</span>
+        });
+<span class="nc" id="L161">        jpnDatosPeriodo.add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 30, 80, -1));</span>
+
+<span class="nc" id="L163">        getContentPane().add(jpnDatosPeriodo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 310, 190));</span>
+
+<span class="nc" id="L165">        btnRegistrar.setText(&quot;Registrar&quot;);</span>
+<span class="nc" id="L166">        btnRegistrar.addActionListener(new java.awt.event.ActionListener() {</span>
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L168">                btnRegistrarActionPerformed(evt);</span>
+<span class="nc" id="L169">            }</span>
+        });
+<span class="nc" id="L171">        getContentPane().add(btnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 80, -1));</span>
+<span class="nc" id="L172">        btnRegistrar.getAccessibleContext().setAccessibleName(&quot;vdv&quot;);</span>
+
+<span class="nc" id="L174">        btnModificar.setText(&quot;Modificar&quot;);</span>
+<span class="nc" id="L175">        btnModificar.addActionListener(new java.awt.event.ActionListener() {</span>
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L177">                btnModificarActionPerformed(evt);</span>
+<span class="nc" id="L178">            }</span>
+        });
+<span class="nc" id="L180">        getContentPane().add(btnModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 210, 80, -1));</span>
+
+<span class="nc" id="L182">        btnCancelar.setText(&quot;Cancelar&quot;);</span>
+<span class="nc" id="L183">        btnCancelar.addActionListener(new java.awt.event.ActionListener() {</span>
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L185">                btnCancelarActionPerformed(evt);</span>
+<span class="nc" id="L186">            }</span>
+        });
+<span class="nc" id="L188">        getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 210, 80, -1));</span>
+
+<span class="nc" id="L190">        pack();</span>
+<span class="nc" id="L191">    }// &lt;/editor-fold&gt;//GEN-END:initComponents</span>
+
+    private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
+        // TODO add your handling code here:   
+<span class="nc" id="L195">        ObtenerDatos();     </span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">        if(estado) {</span>
+                try {                 
+<span class="nc" id="L198">                    periodo = new Periodo(fechainicioperiodo, fechafinperiodo);</span>
+<span class="nc" id="L199">                    gestionarPeriodo = new ServGestionarPeriodo();</span>
+<span class="nc" id="L200">                    int registros_afectados = gestionarPeriodo.IngresarPeriodo(periodo);                   </span>
+<span class="nc bnc" id="L201" title="All 2 branches missed.">                    if(registros_afectados == 1){</span>
+<span class="nc" id="L202">                        Mensaje.mostrarAfirmacion(this, Mensaje.REGISTRO_CREADO);</span>
+<span class="nc" id="L203">                        EstadoControles(false);</span>
+<span class="nc" id="L204">                        btnRegistrar.setText(&quot;Actualizar&quot;);</span>
+<span class="nc" id="L205">                        btnCancelar.setText(&quot;Finalizar&quot;);</span>
+<span class="nc" id="L206">                        DevolverPeriodo(periodo.getIdperiodo());</span>
+<span class="nc" id="L207">                        MostrarDatos(periodo);</span>
+                    }
+<span class="nc" id="L209">                } catch (Exception e) {</span>
+<span class="nc" id="L210">                    Mensaje.mostrarError(this, Mensaje.ERROR_INGRESO);</span>
+<span class="nc" id="L211">                }</span>
+        } else {
+                    try{
+<span class="nc" id="L214">                        periodo = new Periodo(idPeriodo, estadoPeriodo, fechainicioperiodo, fechafinperiodo);</span>
+<span class="nc" id="L215">                        gestionarPeriodo = new ServGestionarPeriodo();                          </span>
+<span class="nc" id="L216">                        int registros_afectados =  gestionarPeriodo.ModificarPeriodo(periodo);</span>
+
+<span class="nc bnc" id="L218" title="All 2 branches missed.">                        if(registros_afectados == 1){</span>
+<span class="nc" id="L219">                            Mensaje.mostrarAfirmacion(this, Mensaje.REGISTRO_ACTUALIZADO);                                      </span>
+<span class="nc" id="L220">                            btnCancelar.setText(&quot;Terminar&quot;);   </span>
+<span class="nc" id="L221">                            MostrarDatos(periodo);</span>
+                        }
+<span class="nc" id="L223">                    } catch (Exception e) {</span>
+<span class="nc" id="L224">                        Mensaje.mostrarError(this, Mensaje.ERROR_ACTUALIZACION);</span>
+<span class="nc" id="L225">                    } </span>
+            }     
+<span class="nc" id="L227">    }//GEN-LAST:event_btnRegistrarActionPerformed</span>
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+<span class="nc bnc" id="L231" title="All 2 branches missed.">        if(btnCancelar.getText().equalsIgnoreCase(&quot;Terminar&quot;)){</span>
+<span class="nc" id="L232">            dispose();</span>
+<span class="nc bnc" id="L233" title="All 2 branches missed.">        }else if(btnCancelar.getText().equalsIgnoreCase(&quot;Cancelar&quot;)){</span>
+<span class="nc" id="L234">            EstadoInicio();</span>
+            }else{
+<span class="nc" id="L236">                MostrarDatos(periodo);</span>
+<span class="nc" id="L237">                EstadoDefault();</span>
+        }
+<span class="nc" id="L239">    }//GEN-LAST:event_btnCancelarActionPerformed</span>
+
+    private void jdcFechaInicioPeriodoPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jdcFechaInicioPeriodoPropertyChange
+        // TODO add your handling code here:
+<span class="nc" id="L243">        jdcFechaInicioPeriodo.getJCalendar().setMinSelectableDate(new Date());</span>
+<span class="nc" id="L244">        ((JTextFieldDateEditor)jdcFechaFinPeriodo.getDateEditor()).setEditable(false);</span>
+<span class="nc" id="L245">    }//GEN-LAST:event_jdcFechaInicioPeriodoPropertyChange</span>
+
+    private void jdcFechaFinPeriodoPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jdcFechaFinPeriodoPropertyChange
+        // TODO add your handling code here:
+<span class="nc" id="L249">         jdcFechaFinPeriodo.getJCalendar().setMinSelectableDate(new Date());</span>
+<span class="nc" id="L250">        ((JTextFieldDateEditor)jdcFechaFinPeriodo.getDateEditor()).setEditable(false);</span>
+<span class="nc" id="L251">    }//GEN-LAST:event_jdcFechaFinPeriodoPropertyChange</span>
+
+    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+        // TODO add your handling code here:
+        //&amp;&amp; !listaPeriodo.isEmpty()  
+<span class="nc" id="L256">        Estado(true);</span>
+
+<span class="nc" id="L258">    }//GEN-LAST:event_btnNuevoActionPerformed</span>
+
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        // TODO add your handling code here:
+<span class="nc" id="L262">        ActivarEntradas(true);</span>
+<span class="nc" id="L263">        jdcFechaInicioPeriodo.setEnabled(true);</span>
+<span class="nc" id="L264">        ActivarControles(true);</span>
+<span class="nc" id="L265">        btnRegistrar.setText(&quot;Actualizar&quot;);</span>
+<span class="nc" id="L266">        EstadoControles(true); </span>
+<span class="nc" id="L267">    }//GEN-LAST:event_btnModificarActionPerformed</span>
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //&lt;editor-fold defaultstate=&quot;collapsed&quot; desc=&quot; Look and feel setting code (optional) &quot;&gt;
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+<span class="nc bnc" id="L279" title="All 2 branches missed.">            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {</span>
+<span class="nc bnc" id="L280" title="All 2 branches missed.">                if (&quot;Nimbus&quot;.equals(info.getName())) {</span>
+<span class="nc" id="L281">                    javax.swing.UIManager.setLookAndFeel(info.getClassName());</span>
+<span class="nc" id="L282">                    break;</span>
+                }
+            }
+<span class="nc" id="L285">        } catch (ClassNotFoundException ex) {</span>
+<span class="nc" id="L286">            java.util.logging.Logger.getLogger(DlgPeriodo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L287">        } catch (InstantiationException ex) {</span>
+<span class="nc" id="L288">            java.util.logging.Logger.getLogger(DlgPeriodo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L289">        } catch (IllegalAccessException ex) {</span>
+<span class="nc" id="L290">            java.util.logging.Logger.getLogger(DlgPeriodo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L291">        } catch (javax.swing.UnsupportedLookAndFeelException ex) {</span>
+<span class="nc" id="L292">            java.util.logging.Logger.getLogger(DlgPeriodo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);</span>
+<span class="nc" id="L293">        }</span>
+        //&lt;/editor-fold&gt;
+
+        /* Create and display the dialog */
+<span class="nc" id="L297">        java.awt.EventQueue.invokeLater(new Runnable() {</span>
+            public void run() {
+<span class="nc" id="L299">                DlgPeriodo dialog = new DlgPeriodo(new javax.swing.JFrame(), true);</span>
+<span class="nc" id="L300">                dialog.addWindowListener(new java.awt.event.WindowAdapter() {</span>
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+<span class="nc" id="L303">                        System.exit(0);</span>
+<span class="nc" id="L304">                    }</span>
+                });
+<span class="nc" id="L306">                dialog.setVisible(true);</span>
+<span class="nc" id="L307">            }</span>
+        });
+<span class="nc" id="L309">    }</span>
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnModificar;
+    private javax.swing.JButton btnNuevo;
+    private javax.swing.JButton btnRegistrar;
+    private com.toedter.calendar.JDateChooser jdcFechaFinPeriodo;
+    private com.toedter.calendar.JDateChooser jdcFechaInicioPeriodo;
+    private javax.swing.JPanel jpnDatosPeriodo;
+    private javax.swing.JLabel lblCodigo;
+    private javax.swing.JLabel lblEstado;
+    private javax.swing.JLabel lblFinPeriodo;
+    private javax.swing.JLabel lblInicioPeriodo;
+    private javax.swing.JTextField txtCodigo;
+    private javax.swing.JTextField txtEstado;
+    // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void EstadoInicio() {
+<span class="nc" id="L329">        BuscarPeriodoVigente();</span>
+//        if(periodoVigente == null){
+//            JOptionPane.showMessageDialog(null,&quot;Sin periodo vigente&quot;);
+//        }
+<span class="nc" id="L333">    }</span>
+
+    @Override
+    public void Estado(boolean parEstado) {
+<span class="nc" id="L337">        estado = parEstado;</span>
+////////Estado Registrar
+<span class="nc bnc" id="L339" title="All 2 branches missed.">        if(parEstado == true){ </span>
+<span class="nc" id="L340">            LimpiarEntradas();</span>
+<span class="nc" id="L341">            ActivarEntradas(true);</span>
+<span class="nc" id="L342">            EstadoControles(true);</span>
+<span class="nc" id="L343">            jdcFechaInicioPeriodo.requestFocus();     </span>
+<span class="nc" id="L344">            btnRegistrar.setText(&quot;Registrar&quot;);</span>
+////////Estado Modificar
+        }else{
+<span class="nc" id="L347">            ActivarEntradas(false);</span>
+<span class="nc" id="L348">            EstadoControles(false);</span>
+<span class="nc" id="L349">            jdcFechaInicioPeriodo.setEnabled(false);</span>
+<span class="nc" id="L350">            jdcFechaFinPeriodo.setEnabled(false);</span>
+<span class="nc" id="L351">        }    }</span>
+
+    @Override
+    public void EstadoDefault() {
+<span class="nc" id="L355">        Estilo();</span>
+<span class="nc" id="L356">        LimpiarEntradas();</span>
+<span class="nc" id="L357">        txtCodigo.setEditable(false);</span>
+<span class="nc" id="L358">        txtEstado.setEditable(false);</span>
+<span class="nc" id="L359">        jdcFechaInicioPeriodo.requestFocus();</span>
+<span class="nc" id="L360">        btnRegistrar.setText(&quot;Registrar&quot;);       </span>
+<span class="nc" id="L361">        ActivarControles(false);</span>
+<span class="nc" id="L362">        ActivarEntradas(false);</span>
+<span class="nc" id="L363">        EventoTecla();  </span>
+<span class="nc" id="L364">    }</span>
+
+    @Override
+    public void LimpiarEntradas() {
+<span class="nc" id="L368">        txtCodigo.setText(&quot;&quot;);</span>
+<span class="nc" id="L369">        txtEstado.setText(&quot;&quot;);</span>
+<span class="nc" id="L370">        jdcFechaInicioPeriodo.setDate(null);</span>
+<span class="nc" id="L371">        jdcFechaFinPeriodo.setDate(null);</span>
+<span class="nc" id="L372">    }</span>
+
+    @Override
+    public void ActivarControles(boolean sw) {
+<span class="nc bnc" id="L376" title="All 2 branches missed.">        btnNuevo.setEnabled(!sw);</span>
+<span class="nc" id="L377">        btnRegistrar.setEnabled(sw);</span>
+<span class="nc" id="L378">        btnModificar.setEnabled(sw);</span>
+<span class="nc" id="L379">        btnCancelar.setEnabled(sw);</span>
+<span class="nc" id="L380">    }</span>
+
+    @Override
+    public void ActivarEntradas(boolean sw) {
+<span class="nc" id="L384">        txtCodigo.setEnabled(sw);</span>
+<span class="nc" id="L385">        txtEstado.setEnabled(sw);</span>
+<span class="nc" id="L386">        jdcFechaInicioPeriodo.setEnabled(sw);       </span>
+<span class="nc" id="L387">        jdcFechaFinPeriodo.setEnabled(sw);</span>
+<span class="nc" id="L388">    }</span>
+
+    @Override
+    public void EstadoControles(boolean sw) {
+<span class="nc" id="L392">        btnNuevo.setEnabled(false);</span>
+<span class="nc" id="L393">        btnRegistrar.setEnabled(sw);</span>
+<span class="nc bnc" id="L394" title="All 2 branches missed.">        btnModificar.setEnabled(!sw);</span>
+<span class="nc" id="L395">        btnCancelar.setEnabled(true);</span>
+<span class="nc" id="L396">    }</span>
+
+    @Override
+    public void EstadoEntradas(boolean sw) {
+//        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;); //To change body of generated methods, choose Tools | Templates.
+<span class="nc" id="L401">    }</span>
+
+    @Override
+    public void VisibilidadControles(boolean sw) {
+<span class="nc" id="L405">        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;); //To change body of generated methods, choose Tools | Templates.</span>
+    }
+
+    @Override
+    public void ObtenerDatos() {
+<span class="nc bnc" id="L410" title="All 4 branches missed.">        if(jdcFechaInicioPeriodo.getDate() != null &amp;&amp; jdcFechaFinPeriodo.getDate() != null){        </span>
+<span class="nc bnc" id="L411" title="All 2 branches missed.">            if(txtCodigo.getText().length() &gt; 0){</span>
+<span class="nc" id="L412">                idPeriodo = Integer.parseInt(txtCodigo.getText().trim());</span>
+            }    
+<span class="nc" id="L414">            estadoPeriodo = txtEstado.getText().toUpperCase();</span>
+<span class="nc" id="L415">            long date = 0;     </span>
+<span class="nc" id="L416">            Date Fechainicio = jdcFechaInicioPeriodo.getDate();                </span>
+<span class="nc" id="L417">            date = Fechainicio.getTime(); </span>
+<span class="nc" id="L418">            fechainicioperiodo = new java.sql.Date(date);</span>
+<span class="nc" id="L419">            Date Fechafin = jdcFechaFinPeriodo.getDate();                </span>
+<span class="nc" id="L420">            date = Fechafin.getTime(); </span>
+<span class="nc" id="L421">            fechafinperiodo = new java.sql.Date(date);     </span>
+<span class="nc" id="L422">        }else{</span>
+<span class="nc" id="L423">                Mensaje.mostrarAdvertencia(this, Mensaje.DATOS_INCOMPLETOS);</span>
+            }   
+<span class="nc" id="L425">    }</span>
+
+    @Override
+    public void setMnemonic() {
+<span class="nc" id="L429">        throw new UnsupportedOperationException(&quot;Not supported yet.&quot;); //To change body of generated methods, choose Tools | Templates.</span>
+    }
+
+    @Override
+    public void Estilo() {
+<span class="nc" id="L434">        Object[ ] etiquetas = {lblCodigo, lblEstado, lblInicioPeriodo, lblFinPeriodo};</span>
+<span class="nc" id="L435">        EstiloEtiqueta estilo = new EstiloEtiqueta(etiquetas);</span>
+<span class="nc" id="L436">        jpnDatosPeriodo.setFont(VGlobales.estiloFuente);</span>
+<span class="nc" id="L437">    }</span>
+
+    @Override
+    public void EventoTecla() {
+<span class="nc" id="L441">        jpnDatosPeriodo.addKeyListener(new AtajosTecladoDlg(this));</span>
+<span class="nc" id="L442">        txtCodigo.addKeyListener(new AtajosTecladoDlg(this));</span>
+<span class="nc" id="L443">        jdcFechaInicioPeriodo.addKeyListener(new AtajosTecladoDlg(this));</span>
+<span class="nc" id="L444">        jdcFechaFinPeriodo.addKeyListener(new AtajosTecladoDlg(this));</span>
+<span class="nc" id="L445">        txtEstado.addKeyListener(new AtajosTecladoDlg(this));</span>
+<span class="nc" id="L446">        btnNuevo.addKeyListener(new AtajosTecladoDlg(this));</span>
+<span class="nc" id="L447">        btnRegistrar.addKeyListener(new AtajosTecladoDlg(this));</span>
+<span class="nc" id="L448">        btnModificar.addKeyListener(new AtajosTecladoDlg(this));</span>
+<span class="nc" id="L449">        btnCancelar.addKeyListener(new AtajosTecladoDlg(this));</span>
+<span class="nc" id="L450">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

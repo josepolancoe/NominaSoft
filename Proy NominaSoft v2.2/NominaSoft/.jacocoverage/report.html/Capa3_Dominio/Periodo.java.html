@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Periodo.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;NominaSoft&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">Capa3_Dominio</a> &gt; <span class="el_source">Periodo.java</span></div><h1>Periodo.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Capa3_Dominio;
+
+import java.util.Calendar;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+
+
+
+public class Periodo {
+    int idperiodo; 
+    String estado;
+    Date fechainicioperiodo;
+    Date fechafinperiodo;
+    
+
+<span class="nc" id="L21">    public Periodo(int idperiodo, String estado, Date fechainicioperiodo, Date fechafinperiodo) {</span>
+<span class="nc" id="L22">        this.idperiodo = idperiodo;</span>
+<span class="nc" id="L23">        this.estado = estado;</span>
+<span class="nc" id="L24">        this.fechainicioperiodo = fechainicioperiodo;</span>
+<span class="nc" id="L25">        this.fechafinperiodo = fechafinperiodo; </span>
+        
+<span class="nc" id="L27">    }</span>
+
+<span class="nc" id="L29">    public Periodo(Date fechainicioperiodo, Date fechafinperiodo) {</span>
+<span class="nc" id="L30">        this.fechainicioperiodo = fechainicioperiodo;</span>
+<span class="nc" id="L31">        this.fechafinperiodo = fechafinperiodo;</span>
+<span class="nc" id="L32">    }</span>
+
+<span class="fc" id="L34">    public Periodo() {</span>
+<span class="fc" id="L35">    }</span>
+
+    public int getIdperiodo() {
+<span class="nc" id="L38">        return idperiodo;</span>
+    }
+
+    public void setIdperiodo(int idperiodo) {
+<span class="nc" id="L42">        this.idperiodo = idperiodo;</span>
+<span class="nc" id="L43">    }</span>
+
+    public String getEstado() {
+<span class="nc" id="L46">        return estado;</span>
+    }
+
+    public void setEstado(String estado) {
+<span class="fc" id="L50">        this.estado = estado;</span>
+<span class="fc" id="L51">    }</span>
+
+    public Date getFechainicioperiodo() {
+<span class="nc" id="L54">        return fechainicioperiodo;</span>
+    }
+
+    public void setFechainicioperiodo(Date fechainicioperiodo) {
+<span class="fc" id="L58">        this.fechainicioperiodo = fechainicioperiodo;</span>
+<span class="fc" id="L59">    }</span>
+
+    public Date getFechafinperiodo() {
+<span class="nc" id="L62">        return fechafinperiodo;</span>
+    }
+
+    public void setFechafinperiodo(Date fechafinperiodo) {
+<span class="fc" id="L66">        this.fechafinperiodo = fechafinperiodo;</span>
+<span class="fc" id="L67">    }</span>
+    
+    public Boolean verificarPeriodoVigente(){   
+<span class="fc" id="L70">        boolean respuesta = false;</span>
+<span class="fc" id="L71">        java.util.Date fechaActual = new java.util.Date(); </span>
+<span class="fc" id="L72">        SimpleDateFormat formateador = new SimpleDateFormat(&quot;dd/MM/yyyy&quot;);</span>
+<span class="fc" id="L73">        String fechaSistemaSDF = formateador.format(fechaActual);</span>
+<span class="fc" id="L74">        String fechafinperiodoSDF = formateador.format(fechafinperiodo); </span>
+<span class="fc" id="L75">        System.out.print(fechaSistemaSDF);</span>
+<span class="fc" id="L76">        System.out.print(fechafinperiodoSDF);</span>
+<span class="pc bpc" id="L77" title="1 of 4 branches missed.">        if(fechafinperiodo.getTime() &gt; fechaActual.getTime() || fechaSistemaSDF.equalsIgnoreCase(fechafinperiodoSDF)){</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">            if(estado.compareTo(&quot;ACTIVO&quot;)==0){</span>
+<span class="fc" id="L79">                respuesta = true;</span>
+            }
+        }else         
+<span class="fc" id="L82">            respuesta = false;</span>
+        
+<span class="fc" id="L84">        return respuesta;</span>
+    }
+     
+    public Boolean verificarProcesoPeriodoVigente(){   
+<span class="nc" id="L88">        java.util.Date fechaActual = new java.util.Date();        </span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        return fechafinperiodo.getTime() &lt;= fechaActual.getTime(); </span>
+    }
+      
+    public int calculartotalSemanasPeriodo(){
+<span class="fc" id="L93">        int totalSemanas = 0;</span>
+<span class="fc" id="L94">        int dias = 0;</span>
+<span class="fc" id="L95">        int control = 0;</span>
+
+<span class="fc" id="L97">        Calendar calendarinicio = Calendar.getInstance();</span>
+<span class="fc" id="L98">        Calendar calendarfin = Calendar.getInstance();</span>
+<span class="fc" id="L99">        calendarinicio.setTime(fechainicioperiodo); </span>
+<span class="fc" id="L100">        calendarfin.setTime(fechafinperiodo); </span>
+        
+<span class="fc bfc" id="L102" title="All 4 branches covered.">        while(calendarinicio.before(calendarfin)|| calendarinicio.equals(calendarfin)){</span>
+<span class="fc" id="L103">            dias ++;</span>
+            if(Calendar.DAY_OF_WEEK == 2){
+                control ++;
+            } 
+<span class="fc" id="L107">            calendarinicio.add(Calendar.DAY_OF_YEAR, 1);  </span>
+        }
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">        if(control*7 &gt; dias){</span>
+<span class="nc" id="L110">            totalSemanas = control - 1;</span>
+        }else{
+<span class="fc" id="L112">            totalSemanas = dias/7;</span>
+        }
+<span class="fc" id="L114">        return totalSemanas; </span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ConceptoDAOPostgre.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;NominaSoft&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.source.html" class="el_package">Capa4_Persistencia</a> &gt; <span class="el_source">ConceptoDAOPostgre.java</span></div><h1>ConceptoDAOPostgre.java</h1><pre class="source lang-java linenums">/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Capa4_Persistencia;
+
+import Capa3_Dominio.Concepto;
+import Capa3_Dominio.Contrato;
+import Capa3_Dominio.Periodo;
+import Capa5_Excepcion.ExcepcionSQL;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ *
+ * @author JOSEPOLANCO
+ */
+public class ConceptoDAOPostgre {
+    
+    GestorJDBC gestorJDBC;
+    
+<span class="nc" id="L26">    public ConceptoDAOPostgre(GestorJDBC gestorJDBC) {</span>
+<span class="nc" id="L27">        this.gestorJDBC = gestorJDBC;</span>
+<span class="nc" id="L28">    }</span>
+
+    private void asignarParametros(PreparedStatement sentencia, Concepto concepto) throws SQLException{
+        //sentencia.setInt(9, conceptos.getIdconceptoingresodescuento());
+<span class="nc" id="L32">        sentencia.setInt(1, concepto.getContrato().getIdcontrato());</span>
+<span class="nc" id="L33">        sentencia.setInt(2, concepto.getPeriodo().getIdperiodo());</span>
+<span class="nc" id="L34">        sentencia.setInt(3, concepto.getHorasextra());</span>
+<span class="nc" id="L35">        sentencia.setDouble(4, concepto.getReintegros());</span>
+<span class="nc" id="L36">        sentencia.setDouble(5, concepto.getOtrosingresos());</span>
+<span class="nc" id="L37">        sentencia.setInt(6, concepto.getHorasausente());</span>
+<span class="nc" id="L38">        sentencia.setDouble(7, concepto.getAdelantos());</span>
+<span class="nc" id="L39">        sentencia.setDouble(8, concepto.getOtrosdescuentos());</span>
+            
+<span class="nc" id="L41">    }</span>
+    private Concepto crearObjConcepto (ResultSet resultado) throws SQLException {        
+<span class="nc" id="L43">        Contrato contrato = new Contrato();</span>
+<span class="nc" id="L44">        contrato.setIdcontrato(resultado.getInt(&quot;idcontrato&quot;));</span>
+<span class="nc" id="L45">        Periodo periodo = new Periodo();</span>
+<span class="nc" id="L46">        periodo.setIdperiodo(resultado.getInt(&quot;idperiodo&quot;));       </span>
+<span class="nc" id="L47">        return new Concepto(resultado.getInt(&quot;idconcepto&quot;),</span>
+                            contrato,
+                            periodo,
+<span class="nc" id="L50">                            resultado.getInt(&quot;horasextra&quot;),</span>
+<span class="nc" id="L51">                            resultado.getDouble(&quot;reintegros&quot;),</span>
+<span class="nc" id="L52">                            resultado.getDouble(&quot;otrosingresos&quot;),</span>
+<span class="nc" id="L53">                            resultado.getInt(&quot;horasausente&quot;),</span>
+<span class="nc" id="L54">                            resultado.getDouble(&quot;adelantos&quot;),</span>
+<span class="nc" id="L55">                            resultado.getDouble(&quot;otrosdescuentos&quot;));          </span>
+    }
+  
+    public Concepto buscarConceptoContrato(int idContrato) throws Exception {
+<span class="nc" id="L59">        Concepto concepto = null;</span>
+        ResultSet resultado;
+<span class="nc" id="L61">        String sentenciaSQL = &quot;Select idconcepto, idcontrato, idperiodo, horasextra, reintegros, otrosingresos, horasausente, adelantos, otrosdescuentos&quot;</span>
+                        + &quot; from concepto where idcontrato = '&quot;+ idContrato + &quot;'&quot;;
+        try {
+<span class="nc" id="L64">            resultado = gestorJDBC.ejecutarConsulta(sentenciaSQL);</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">            if(resultado.next()){</span>
+<span class="nc" id="L66">                concepto = crearObjConcepto(resultado);</span>
+            }
+<span class="nc" id="L68">            resultado.close();</span>
+<span class="nc" id="L69">            return concepto;</span>
+<span class="nc" id="L70">        } catch ( Exception e){</span>
+<span class="nc" id="L71">            throw ExcepcionSQL.crearErrorConsultar();</span>
+        }
+    }
+
+    public Concepto buscarConcepto(int idConcepto) throws Exception {
+<span class="nc" id="L76">        Concepto concepto = null;</span>
+        ResultSet resultado;
+<span class="nc" id="L78">        String sentenciaSQL = &quot;Select idconcepto, idcontrato, idperiodo, horasextra, reintegros, otrosingresos, horasausente, adelantos, otrosdescuentos&quot;</span>
+                        + &quot;from concepto where idconcepto = '&quot;+ idConcepto + &quot;'&quot;;
+        try {
+<span class="nc" id="L81">            resultado = gestorJDBC.ejecutarConsulta(sentenciaSQL);</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">            if(resultado.next()){</span>
+<span class="nc" id="L83">                concepto = crearObjConcepto(resultado);</span>
+            }
+<span class="nc" id="L85">            resultado.close();</span>
+<span class="nc" id="L86">            return concepto;</span>
+<span class="nc" id="L87">        } catch ( Exception e){</span>
+<span class="nc" id="L88">            throw ExcepcionSQL.crearErrorConsultar();</span>
+        }
+    }
+    
+//    public List&lt;Concepto&gt; buscarConceptos(int idcontrato) throws Exception{
+//        ArrayList&lt;Concepto&gt; listaConceptos = new ArrayList ();
+//        ResultSet resultado;
+//        Concepto concepto;
+//          
+//        String sentenciaSQL = &quot;Select idconcepto, idcontrato, idperiodo, horasextra, reintegros, otrosingresos, horasausente, adelantos, otrosdescuentos&quot;
+//                + &quot;from concepto where idconcepto = '&quot; +idcontrato + &quot;'&quot;;       
+//        try {
+//            resultado = gestorJDBC.ejecutarConsulta(sentenciaSQL);
+//            while(resultado.next()){
+//                concepto = crearObjConcepto(resultado);
+//                listaConceptos.add(concepto);
+//            }
+//            resultado.close();
+//            return listaConceptos;
+//        } catch (Exception e){
+//            throw ExcepcionSQL.crearErrorConsultar();
+//        }
+//    }
+
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.6.201602180812</span></div></body></html>
